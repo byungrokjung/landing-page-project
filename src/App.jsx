@@ -10,7 +10,7 @@ function App() {
     
     // 백엔드 API 연결 테스트
     console.log('🟡 [DEBUG] Health API 호출 시작');
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/health`)
+    fetch(`${import.meta.env.VITE_API_URL || ''}/api/health`)
       .then(response => {
         console.log('🟡 [DEBUG] Health API 응답:', response);
         return response.json();
@@ -26,7 +26,7 @@ function App() {
 
     // 인기 케이스 스터디 데이터 로드
     console.log('🟡 [DEBUG] Popular Cases API 호출 시작');
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/content/popular`)
+    fetch(`${import.meta.env.VITE_API_URL || ''}/api/content/popular`)
       .then(response => {
         console.log('🟡 [DEBUG] Popular Cases API 응답:', response);
         return response.json();

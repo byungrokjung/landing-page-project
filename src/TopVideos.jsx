@@ -9,7 +9,7 @@ function TopVideos() {
     console.log('🟢 [DEBUG] TopVideos 컴포넌트 마운트');
     console.log('🟡 [DEBUG] Top Videos API 호출 시작');
     
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/content/top-videos`)
+    fetch(`${import.meta.env.VITE_API_URL || ''}/api/content/top-videos`)
       .then(response => {
         console.log('🟡 [DEBUG] Top Videos API 응답:', response);
         if (!response.ok) {
