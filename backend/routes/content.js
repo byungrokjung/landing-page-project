@@ -199,20 +199,23 @@ router.get('/top-videos', async (req, res) => {
   
   try {
     console.log('🟡 [DEBUG] Supabase 클라이언트로 데이터 조회');
+    console.log('🟡 [DEBUG] SUPABASE_URL:', process.env.SUPABASE_URL);
+    console.log('🟡 [DEBUG] SUPABASE_SERVICE_KEY 존재:', !!process.env.SUPABASE_SERVICE_KEY);
     
-    const { data: videos, error } = await supabase
+    const { data: videos, error } = await supabaseAdmin
       .from('top_performing_videos')
       .select('video_id, title, channel_name, views, likes, engagement_rate, duration_minutes, keywords, upload_date')
       .order('views', { ascending: false })
       .limit(50);
 
     if (error) {
-      console.error('🔴 [DEBUG] Supabase 쿼리 실패:', error.message);
+      console.error('🔴 [DEBUG] Supabase 쿼리 실패:', error);
       throw error;
     }
 
-    console.log('🟢 [DEBUG] Supabase 성공:', videos.length, '개 데이터');
-    res.json(videos);
+    console.log('🟢 [DEBUG] Supabase 성공:', videos ? videos.length : 0, '개 데이터');
+    console.log('🟢 [DEBUG] 첫 번째 데이터:', videos?.[0]);
+    res.json(videos || []);
 
   } catch (supabaseError) {
     console.error('🔴 [DEBUG] Supabase 실패:', supabaseError.message);
