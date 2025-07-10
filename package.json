@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "cd backend && node server.js",
-    "postinstall": "npm run build && cd backend && npm install"
+    "railway:build": "npm run build && cd backend && npm install --production"
   },
   "keywords": [],
   "author": "",
