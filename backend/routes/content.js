@@ -198,25 +198,24 @@ router.get('/top-videos', async (req, res) => {
   console.log('🟢 [DEBUG] /api/content/top-videos 엔드포인트 호출됨');
   
   try {
-    console.log('🟡 [DEBUG] axios로 직접 Supabase API 호출');
+    console.log('🟡 [DEBUG] Supabase 클라이언트로 데이터 조회');
     
-    const axios = require('axios');
-    const response = await axios.get(
-      'https://vmticvgchbcqdyrdjcnp.supabase.co/rest/v1/top_performing_videos?select=video_id,title,channel_name,views,likes,engagement_rate,duration_minutes,keywords,upload_date&order=views.desc&limit=50',
-      {
-        headers: {
-          'apikey': process.env.SUPABASE_SERVICE_KEY,
-          'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
+    const { data: videos, error } = await supabase
+      .from('top_performing_videos')
+      .select('video_id, title, channel_name, views, likes, engagement_rate, duration_minutes, keywords, upload_date')
+      .order('views', { ascending: false })
+      .limit(50);
 
-    console.log('🟢 [DEBUG] axios 성공:', response.data.length, '개 데이터');
-    res.json(response.data);
+    if (error) {
+      console.error('🔴 [DEBUG] Supabase 쿼리 실패:', error.message);
+      throw error;
+    }
 
-  } catch (axiosError) {
-    console.error('🔴 [DEBUG] axios 실패:', axiosError.message);
+    console.log('🟢 [DEBUG] Supabase 성공:', videos.length, '개 데이터');
+    res.json(videos);
+
+  } catch (supabaseError) {
+    console.error('🔴 [DEBUG] Supabase 실패:', supabaseError.message);
     console.log('🟡 [DEBUG] 더미 데이터로 대체');
     
     // 더미 데이터 반환
