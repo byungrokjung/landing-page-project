@@ -34,7 +34,14 @@ app.get('/api/health', (req, res) => {
 // 모든 비API 경로를 React 앱으로 리디렉션 (SPA 지원)
 app.get('*', (req, res) => {
   if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
+    const filePath = path.join(__dirname, '../dist/index.html');
+    console.log('Trying to serve:', filePath);
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        console.error('Error serving file:', err);
+        res.status(500).send('Frontend files not found');
+      }
+    });
   }
 });
 
