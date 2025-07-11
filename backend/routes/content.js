@@ -202,7 +202,7 @@ router.get('/top-videos', async (req, res) => {
     console.log('🟡 [DEBUG] SUPABASE_URL:', process.env.SUPABASE_URL);
     console.log('🟡 [DEBUG] SUPABASE_SERVICE_KEY 존재:', !!process.env.SUPABASE_SERVICE_KEY);
     
-    const { data: videos, error } = await supabaseAdmin
+    const { data: videos, error } = await supabase
       .from('top_performing_videos')
       .select('video_id, title, channel_name, views, likes, engagement_rate, duration_minutes, keywords, upload_date')
       .order('views', { ascending: false })
