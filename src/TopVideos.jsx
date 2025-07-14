@@ -9,7 +9,7 @@ function TopVideos() {
     console.log('🟢 [DEBUG] TopVideos 컴포넌트 마운트');
     console.log('🟡 [DEBUG] Top Videos API 호출 시작');
     
-    fetch(`${import.meta.env.VITE_API_URL || ''}/api/content/top-videos`)
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/content/top-videos`)
       .then(response => {
         console.log('🟡 [DEBUG] Top Videos API 응답:', response);
         if (!response.ok) {
@@ -49,25 +49,26 @@ function TopVideos() {
   return (
     <div style={{ 
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: 'linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%)',
       padding: '40px 20px'
     }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* 헤더 */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <h1 style={{ 
-            color: 'white',
+            color: '#2d5016',
             fontSize: '2.5rem',
             fontWeight: '700',
             margin: '0 0 10px 0',
-            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+            textShadow: '0 2px 4px rgba(255,255,255,0.8)'
           }}>
-            🔥 상위 성과 비디오
+            🌿 상위 성과 비디오
           </h1>
           <p style={{
-            color: 'rgba(255,255,255,0.9)',
+            color: '#3e7b27',
             fontSize: '1.1rem',
-            margin: '0'
+            margin: '0',
+            fontWeight: '500'
           }}>
             조회수와 참여율이 높은 인기 비디오들을 확인해보세요
           </p>
@@ -104,12 +105,13 @@ function TopVideos() {
                 position: 'absolute',
                 top: '16px',
                 right: '16px',
-                backgroundColor: index < 3 ? '#ff6b6b' : '#4ecdc4',
+                backgroundColor: index < 3 ? '#388e3c' : '#66bb6a',
                 color: 'white',
                 borderRadius: '20px',
                 padding: '6px 12px',
                 fontSize: '14px',
-                fontWeight: '600'
+                fontWeight: '600',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
               }}>
                 #{index + 1}
               </div>
@@ -144,12 +146,12 @@ function TopVideos() {
 
               {/* 채널명 */}
               <div style={{
-                backgroundColor: '#f8f9fa',
+                backgroundColor: '#e8f5e8',
                 borderRadius: '8px',
                 padding: '8px 12px',
                 marginBottom: '16px',
                 fontSize: '14px',
-                color: '#6c757d',
+                color: '#2e7d32',
                 fontWeight: '500'
               }}>
                 📺 {video.channel_name}
@@ -165,26 +167,28 @@ function TopVideos() {
                 <div style={{
                   textAlign: 'center',
                   padding: '12px',
-                  backgroundColor: '#e3f2fd',
-                  borderRadius: '12px'
+                  backgroundColor: '#f1f8e9',
+                  borderRadius: '12px',
+                  border: '1px solid #c8e6c9'
                 }}>
-                  <div style={{ fontSize: '1.2rem', fontWeight: '700', color: '#1976d2' }}>
+                  <div style={{ fontSize: '1.2rem', fontWeight: '700', color: '#2e7d32' }}>
                     {video.views.toLocaleString()}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+                  <div style={{ fontSize: '12px', color: '#4e342e', marginTop: '4px' }}>
                     조회수
                   </div>
                 </div>
                 <div style={{
                   textAlign: 'center',
                   padding: '12px',
-                  backgroundColor: '#fce4ec',
-                  borderRadius: '12px'
+                  backgroundColor: '#e8f5e8',
+                  borderRadius: '12px',
+                  border: '1px solid #a5d6a7'
                 }}>
-                  <div style={{ fontSize: '1.2rem', fontWeight: '700', color: '#c2185b' }}>
+                  <div style={{ fontSize: '1.2rem', fontWeight: '700', color: '#388e3c' }}>
                     {video.likes.toLocaleString()}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+                  <div style={{ fontSize: '12px', color: '#4e342e', marginTop: '4px' }}>
                     좋아요
                   </div>
                 </div>
@@ -197,22 +201,24 @@ function TopVideos() {
                 marginBottom: '16px'
               }}>
                 <div style={{
-                  backgroundColor: '#e8f5e8',
+                  backgroundColor: '#dcedc8',
                   padding: '6px 12px',
                   borderRadius: '20px',
                   fontSize: '14px',
-                  color: '#2e7d32',
-                  fontWeight: '600'
+                  color: '#1b5e20',
+                  fontWeight: '600',
+                  border: '1px solid #aed581'
                 }}>
                   📊 {video.engagement_rate.toFixed(1)}%
                 </div>
                 <div style={{
-                  backgroundColor: '#fff3e0',
+                  backgroundColor: '#f9fbe7',
                   padding: '6px 12px',
                   borderRadius: '20px',
                   fontSize: '14px',
-                  color: '#f57c00',
-                  fontWeight: '600'
+                  color: '#33691e',
+                  fontWeight: '600',
+                  border: '1px solid #c5e1a5'
                 }}>
                   ⏰ {video.duration_minutes}분
                 </div>
@@ -221,8 +227,9 @@ function TopVideos() {
               {/* 업로드 날짜 */}
               <div style={{
                 fontSize: '13px',
-                color: '#666',
-                marginBottom: '12px'
+                color: '#4e342e',
+                marginBottom: '12px',
+                fontWeight: '500'
               }}>
                 📅 {new Date(video.upload_date).toLocaleDateString('ko-KR')}
               </div>
@@ -237,12 +244,13 @@ function TopVideos() {
                   <span
                     key={keyIndex}
                     style={{
-                      backgroundColor: '#f1f3f4',
-                      color: '#5f6368',
+                      backgroundColor: '#e8f5e8',
+                      color: '#1b5e20',
                       padding: '4px 8px',
                       borderRadius: '16px',
                       fontSize: '12px',
-                      fontWeight: '500'
+                      fontWeight: '500',
+                      border: '1px solid #a5d6a7'
                     }}
                   >
                     #{keyword}
@@ -251,7 +259,7 @@ function TopVideos() {
                 {video.keywords.length > 4 && (
                   <span style={{ 
                     fontSize: '12px', 
-                    color: '#666',
+                    color: '#4e342e',
                     padding: '4px 8px'
                   }}>
                     +{video.keywords.length - 4}개
@@ -269,7 +277,7 @@ function TopVideos() {
             style={{
               padding: '16px 32px',
               backgroundColor: 'white',
-              color: '#667eea',
+              color: '#2e7d32',
               border: '2px solid white',
               borderRadius: '50px',
               cursor: 'pointer',
@@ -279,13 +287,13 @@ function TopVideos() {
               transition: 'all 0.3s ease'
             }}
             onMouseEnter={(e) => {
-              e.target.style.backgroundColor = '#667eea';
+              e.target.style.backgroundColor = '#2e7d32';
               e.target.style.color = 'white';
               e.target.style.transform = 'translateY(-2px)';
             }}
             onMouseLeave={(e) => {
               e.target.style.backgroundColor = 'white';
-              e.target.style.color = '#667eea';
+              e.target.style.color = '#2e7d32';
               e.target.style.transform = 'translateY(0)';
             }}
           >

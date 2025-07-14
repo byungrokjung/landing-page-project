@@ -53,9 +53,25 @@ function App() {
               1인 기업가부터 최신 AI 스타트업까지,<br />
               전 세계 모든 성공 케이스를 확인하고 비즈니스에 적용해보세요.
             </p>
-            <a href="/videos" className="cta-button">
-              지금 무료로 시작하기
-            </a>
+            <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href="/videos" className="cta-button">
+                지금 무료로 시작하기
+              </a>
+              <a href="/creative-studio" className="cta-button" style={{
+                background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+                boxShadow: '0 4px 15px rgba(255, 107, 107, 0.3)',
+                border: 'none'
+              }}>
+                🎬 AI Creative Studio
+              </a>
+              <a href="/ai-video-generator" className="cta-button" style={{
+                background: 'linear-gradient(45deg, #ffa500, #ff6b47)',
+                boxShadow: '0 4px 15px rgba(255, 165, 0, 0.3)',
+                border: 'none'
+              }}>
+                🚀 AI Video Generator
+              </a>
+            </div>
             <div className="member-count">
               500명 이상의 멤버들이 함께하고 있습니다!
             </div>
