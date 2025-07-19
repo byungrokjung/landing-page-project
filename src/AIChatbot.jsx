@@ -74,13 +74,17 @@ const AIChatbot = ({ isOpen, onClose }) => {
             content: inputText
           }
         ],
-        max_tokens: 400,
+        max_tokens: 800,
         temperature: 0.3
       });
 
+      const responseContent = completion.choices[0].message.content;
+      console.log('OpenAI 응답 길이:', responseContent.length);
+      console.log('완료 이유:', completion.choices[0].finish_reason);
+      
       const botResponse = {
         id: Date.now() + 1,
-        text: completion.choices[0].message.content,
+        text: responseContent,
         isBot: true,
         timestamp: new Date()
       };
