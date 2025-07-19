@@ -1,0 +1,460 @@
+.flow-root {
+  font-family: 'Segoe UI', 'Pretendard', sans-serif;
+  color: #fff;
+  background: #111;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 네비게이션 */
+.flow-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.flow-nav-back {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.flow-nav-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.flow-nav-logo {
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.flow-hero-bg {
+  position: relative;
+  height: 100vh;
+  background: linear-gradient(120deg, #0f2027, #2c5364 80%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.flow-hero-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.flow-hero-overlay {
+  position: absolute;
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+}
+
+.flow-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.flow-subtitle {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  color: #b0c4de;
+}
+
+.flow-cta {
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 0.8rem 2.2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.flow-cta:hover {
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(0, 114, 255, 0.4);
+}
+
+.flow-cta.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.flow-cta.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: loading 1s infinite;
+}
+
+@keyframes loading {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.flow-section {
+  padding: 4rem 1.5rem 3rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.flow-section:first-of-type {
+  padding-top: 2rem;
+}
+
+.flow-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+}
+
+.flow-gallery-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.flow-gallery-main {
+  position: relative;
+}
+
+.flow-video-player {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.flow-video-thumbnail {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.flow-video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.7));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.flow-video-player:hover .flow-video-overlay {
+  opacity: 1;
+}
+
+.flow-video-player:hover .flow-video-thumbnail {
+  transform: scale(1.05);
+}
+
+.flow-play-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.flow-play-button:hover {
+  transform: scale(1.1);
+  background: #fff;
+}
+
+.flow-video-info {
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.flow-video-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.flow-video-info p {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.flow-duration {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.flow-gallery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.flow-card {
+  background: #222c37;
+  border-radius: 15px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.flow-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 198, 255, 0.2);
+}
+
+.flow-card.active {
+  border-color: #00c6ff;
+  background: #2a3441;
+}
+
+.flow-card img {
+  width: 60px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.flow-card-content {
+  flex: 1;
+}
+
+.flow-card-content h4 {
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.flow-card-content p {
+  font-size: 0.8rem;
+  color: #b0c4de;
+  margin-bottom: 0.3rem;
+}
+
+.flow-card-content span {
+  font-size: 0.7rem;
+  color: #888;
+}
+
+.flow-pricing-list {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.flow-price-card {
+  background: #1a2233;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  min-width: 280px;
+  text-align: center;
+  box-shadow: 0 5px 30px rgba(0,0,0,0.2);
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.flow-price-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.flow-price-card.premium {
+  border-color: #00c6ff;
+  background: linear-gradient(145deg, #1a2233, #2a3441);
+}
+
+.flow-price-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  color: #fff;
+  padding: 0.3rem 1rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.flow-price-badge.premium {
+  background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+}
+
+.flow-price-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.flow-price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #00c6ff;
+}
+
+.flow-price span {
+  font-size: 1rem;
+  color: #b0c4de;
+  font-weight: 400;
+}
+
+.flow-features {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.flow-features li {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #b0c4de;
+}
+
+.flow-features li::before {
+  content: '✓';
+  color: #00c6ff;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.flow-price-card button {
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.flow-price-card button:hover {
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 114, 255, 0.4);
+}
+
+@media (max-width: 800px) {
+  .flow-nav {
+    padding: 1rem;
+  }
+  
+  .flow-nav-logo {
+    font-size: 1rem;
+  }
+  
+  .flow-hero-bg {
+    height: 80vh;
+  }
+  
+  .flow-title {
+    font-size: 2rem;
+  }
+  
+  .flow-gallery-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .flow-video-thumbnail {
+    height: 250px;
+  }
+  
+  .flow-gallery-list {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+  
+  .flow-card {
+    flex-direction: column;
+    min-width: 150px;
+    text-align: center;
+  }
+  
+  .flow-card img {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .flow-pricing-list {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .flow-price-card {
+    min-width: 100%;
+    margin-bottom: 1rem;
+  }
+} 
