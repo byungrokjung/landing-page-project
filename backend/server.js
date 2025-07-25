@@ -25,6 +25,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/subscriptions', require('./routes/subscriptions'));
 app.use('/api/content', require('./routes/content'));
 app.use('/api/email', require('./routes/email'));
+app.use('/api/dashboard', require('./routes/dashboard'));
 
 // Health check
 app.get('/api/health', (req, res) => {

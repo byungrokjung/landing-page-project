@@ -1,0 +1,89 @@
+{
+  "name": "Grok LLM Workflow Example",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "start",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "https://api.grok.x.ai/v1/chat/completions",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "grok-4"
+            },
+            {
+              "name": "messages",
+              "value": "[{{'role': 'user', 'content': {{$json.prompt}}}}]"
+            }
+          ]
+        },
+        "headers": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$secrets.grok_api_key}}"
+            }
+          ]
+        }
+      },
+      "id": "grok_call",
+      "name": "Call Grok API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "= {{$json.taskType}}",
+              "operation": "equal",
+              "value2": "advanced"
+            }
+          ]
+        }
+      },
+      "id": "switch",
+      "name": "Switch Task Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Call Grok API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Grok API": {
+      "main": [
+        [
+          {
+            "node": "Switch Task Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {}
+} 
