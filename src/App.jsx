@@ -14,6 +14,21 @@ function App() {
   useEffect(() => {
     console.log('🟢 [DEBUG] App 컴포넌트 useEffect 시작');
     
+    // 저장된 사용자 정보 확인 (자동 로그인)
+    const savedUserInfo = localStorage.getItem('userInfo');
+    const savedToken = localStorage.getItem('token');
+    if (savedUserInfo && savedToken) {
+      try {
+        const userData = JSON.parse(savedUserInfo);
+        setUser(userData);
+        console.log('🟢 [DEBUG] 저장된 사용자 정보로 자동 로그인:', userData);
+      } catch (error) {
+        console.error('🔴 [DEBUG] 저장된 사용자 정보 파싱 실패:', error);
+        localStorage.removeItem('userInfo');
+        localStorage.removeItem('token');
+      }
+    }
+    
     // 백엔드 API 연결 테스트
     console.log('🟡 [DEBUG] Health API 호출 시작');
     fetch(`${import.meta.env.VITE_API_URL || ''}/api/health`)
@@ -51,6 +66,16 @@ function App() {
   const handleGoogleLoginSuccess = (userData) => {
     console.log('Google 로그인 성공:', userData);
     setUser(userData);
+    
+    // JWT 토큰 또는 액세스 토큰을 localStorage에 저장
+    if (userData.idToken) {
+      localStorage.setItem('token', userData.idToken);
+    } else if (userData.accessToken) {
+      localStorage.setItem('token', userData.accessToken);
+    }
+    
+    // 사용자 정보도 저장 (Dashboard에서 사용)
+    localStorage.setItem('userInfo', JSON.stringify(userData));
   };
 
   const handleGoogleLoginError = (error) => {
@@ -60,6 +85,11 @@ function App() {
 
   const handleLogout = () => {
     setUser(null);
+    
+    // localStorage에서 토큰과 사용자 정보 제거
+    localStorage.removeItem('token');
+    localStorage.removeItem('userInfo');
+    
     if (window.gapi && window.gapi.auth2) {
       window.gapi.auth2.getAuthInstance().signOut();
     }
@@ -76,8 +106,57 @@ function App() {
                   0%, 100% { opacity: 1; transform: scale(1); }
                   50% { opacity: 0.7; transform: scale(1.1); }
                 }
+                
+                .fullscreen-video {
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  width: 100vw;
+                  height: 100vh;
+                  object-fit: cover;
+                  z-index: 0;
+                  background: #000;
+                  opacity: 1;
+                  visibility: visible;
+                }
+                
+                .content-overlay {
+                  position: relative;
+                  z-index: 10;
+                  background: transparent;
+                  min-height: 100vh;
+                  width: 100%;
+                }
               `}
             </style>
+            
+            {/* 전체화면 배경 동영상 */}
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100%',
+                minHeight: '300vh',
+                objectFit: 'cover',
+                zIndex: -1,
+                backgroundColor: '#000'
+              }}
+              onError={(e) => console.error('동영상 로드 오류:', e)}
+              onLoadStart={() => console.log('동영상 로드 시작')}
+              onCanPlay={() => console.log('동영상 재생 가능')}
+              onPlay={() => console.log('동영상 재생 중')}
+            >
+              <source src="/videos/byungrok_hi_httpss.mj.runPGfg1yubUco_a_cinematic_horizontal_s_1e075117-a7a3-4840-af45-28fed78c500e_1.mp4" type="video/mp4" />
+            </video>
+            
+            {/* 콘텐츠 오버레이 */}
+            <div className="content-overlay">
             {/* User Status Section */}
             <div style={{ 
               position: 'fixed', 
@@ -86,7 +165,39 @@ function App() {
               zIndex: 1000
             }}>
               {user ? (
-                <div style={{ position: 'relative', display: 'inline-block' }}>
+                <div 
+                  style={{ 
+                    position: 'relative', 
+                    display: 'inline-block' 
+                  }}
+                  onMouseEnter={(e) => {
+                    const tooltip = e.currentTarget.querySelector('[data-tooltip]');
+                    const profileImg = e.currentTarget.querySelector('img');
+                    if (tooltip && profileImg) {
+                      // 기존 timeout이 있으면 클리어
+                      if (tooltip.hideTimeout) {
+                        clearTimeout(tooltip.hideTimeout);
+                      }
+                      profileImg.style.transform = 'scale(1.05)';
+                      tooltip.style.opacity = '1';
+                      tooltip.style.visibility = 'visible';
+                      tooltip.style.transform = 'translateY(0) scale(1)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    const tooltip = e.currentTarget.querySelector('[data-tooltip]');
+                    const profileImg = e.currentTarget.querySelector('img');
+                    if (tooltip && profileImg) {
+                      // 300ms 지연 후 숨김
+                      tooltip.hideTimeout = setTimeout(() => {
+                        profileImg.style.transform = 'scale(1)';
+                        tooltip.style.opacity = '0';
+                        tooltip.style.visibility = 'hidden';
+                        tooltip.style.transform = 'translateY(-8px) scale(0.95)';
+                      }, 300);
+                    }
+                  }}
+                >
                   <img 
                     src={user.imageUrl} 
                     alt="프로필" 
@@ -100,25 +211,16 @@ function App() {
                       border: '2px solid #fff',
                       transition: 'transform 0.2s ease'
                     }}
-                    onMouseEnter={(e) => {
-                      e.target.style.transform = 'scale(1.05)';
-                      e.target.nextSibling.style.opacity = '1';
-                      e.target.nextSibling.style.visibility = 'visible';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.transform = 'scale(1)';
-                      e.target.nextSibling.style.opacity = '0';
-                      e.target.nextSibling.style.visibility = 'hidden';
-                    }}
                     onError={(e) => {
                       e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiNlMGUwZTAiLz4KPHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSI4IiB5PSI4Ij4KPHBhdGggZD0iTTEyIDEyQzE0LjIxIDEyIDE2IDEwLjIxIDE2IDhDMTYgNS43OSAxNC4yMSA0IDEyIDRDOS43OSA0IDggNS43OSA4IDhDOCAxMC4yMSA5Ljc5IDEyIDEyIDEyWk0xMiAxNEM5LjMzIDE0IDQgMTUuMzQgNCAyMFYyMkgyMFYyMEMyMCAxNS4zNCAxNC42NyAxNCAxMiAxNFoiIGZpbGw9IiM5ZTllOWUiLz4KPHN2Zz4KPHN2Zz4=';
                     }}
                   />
                   <div 
+                    data-tooltip="true"
                     style={{
                       position: 'absolute',
-                      top: '50px',
-                      right: '0',
+                      top: '48px',
+                      right: '-8px',
                       background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(250, 250, 250, 0.98))',
                       backdropFilter: 'blur(20px)',
                       padding: '18px 20px',
@@ -127,7 +229,7 @@ function App() {
                       border: '1px solid rgba(255, 255, 255, 0.4)',
                       opacity: '0',
                       visibility: 'hidden',
-                      transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                      transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                       zIndex: 1001,
                       whiteSpace: 'nowrap',
                       minWidth: '260px',
@@ -135,14 +237,25 @@ function App() {
                       transformOrigin: 'top right'
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.opacity = '1';
-                      e.target.style.visibility = 'visible';
-                      e.target.style.transform = 'translateY(0) scale(1)';
+                      // timeout 클리어해서 사라지지 않게 함
+                      if (e.currentTarget.hideTimeout) {
+                        clearTimeout(e.currentTarget.hideTimeout);
+                      }
+                      e.currentTarget.style.opacity = '1';
+                      e.currentTarget.style.visibility = 'visible';
+                      e.currentTarget.style.transform = 'translateY(0) scale(1)';
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.opacity = '0';
-                      e.target.style.visibility = 'hidden';
-                      e.target.style.transform = 'translateY(-8px) scale(0.95)';
+                      const profileImg = e.currentTarget.parentElement.querySelector('img');
+                      if (profileImg) {
+                        // 300ms 지연 후 숨김
+                        e.currentTarget.hideTimeout = setTimeout(() => {
+                          profileImg.style.transform = 'scale(1)';
+                          e.currentTarget.style.opacity = '0';
+                          e.currentTarget.style.visibility = 'hidden';
+                          e.currentTarget.style.transform = 'translateY(-8px) scale(0.95)';
+                        }, 300);
+                      }
                     }}
                   >
                     {/* 화살표 */}
@@ -243,6 +356,69 @@ function App() {
                       }}>
                         온라인
                       </span>
+                    </div>
+
+                    {/* 버튼 섹션 */}
+                    <div style={{
+                      display: 'flex',
+                      gap: '8px',
+                      marginTop: '12px'
+                    }}>
+                      <button
+                        onClick={() => {
+                          window.history.pushState({}, '', '/dashboard');
+                          window.location.reload();
+                        }}
+                        style={{
+                          flex: 1,
+                          background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '8px 12px',
+                          fontSize: '12px',
+                          fontWeight: '500',
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 8px rgba(59, 130, 246, 0.25)',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.transform = 'translateY(-1px)';
+                          e.target.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.4)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.transform = 'translateY(0)';
+                          e.target.style.boxShadow = '0 2px 8px rgba(59, 130, 246, 0.25)';
+                        }}
+                      >
+                        마이페이지
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        style={{
+                          flex: 1,
+                          background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '8px 12px',
+                          fontSize: '12px',
+                          fontWeight: '500',
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 8px rgba(239, 68, 68, 0.25)',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.transform = 'translateY(-1px)';
+                          e.target.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.4)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.transform = 'translateY(0)';
+                          e.target.style.boxShadow = '0 2px 8px rgba(239, 68, 68, 0.25)';
+                        }}
+                      >
+                        로그아웃
+                      </button>
                     </div>
 
                     {/* 추가 정보 */}
@@ -472,6 +648,7 @@ function App() {
               isOpen={isChatbotOpen} 
               onClose={() => setIsChatbotOpen(false)} 
             />
+            </div> {/* content-overlay 닫기 */}
           </div>
         } />
         <Route path="/flow" element={<FlowBenchmark />} />

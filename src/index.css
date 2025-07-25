@@ -10,7 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0a0a0a;
+  background-color: transparent;
   color: #ffffff;
   line-height: 1.6;
 }
@@ -26,7 +26,7 @@ body {
 }
 
 .hero {
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  background: transparent;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -98,7 +98,7 @@ body {
 }
 
 .features {
-  background: #111111;
+  background: transparent;
   padding: 100px 0;
 }
 
@@ -147,7 +147,7 @@ body {
 }
 
 .cases {
-  background: #0a0a0a;
+  background: transparent;
   padding: 100px 0;
 }
 
@@ -217,7 +217,7 @@ body {
 }
 
 .testimonials {
-  background: #111111;
+  background: transparent;
   padding: 100px 0;
 }
 

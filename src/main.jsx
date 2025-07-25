@@ -4,6 +4,7 @@ import App from './App.jsx'
 import TopVideos from './TopVideos.jsx'
 import CreativeStudio from './CreativeStudio.jsx'
 import AIVideoGenerator from './AIVideoGenerator.jsx'
+import Dashboard from './Dashboard.jsx'
 import './index.css'
 
 function Router() {
@@ -16,6 +17,8 @@ function Router() {
       return <CreativeStudio />;
     case '/ai-video-generator':
       return <AIVideoGenerator />;
+    case '/dashboard':
+      return <Dashboard />;
     default:
       return <App />;
   }
