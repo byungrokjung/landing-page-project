@@ -78,6 +78,12 @@ const SubscriptionPlans = () => {
 
       const data = await response.json();
       
+      // 데모 모드 처리
+      if (data.demoMode) {
+        alert(`🚧 데모 모드\n\n${data.message || data.error}\n\n실제 결제를 위해서는 Stripe 설정이 필요합니다.`);
+        return;
+      }
+      
       if (!data.sessionId) {
         throw new Error('결제 세션 ID를 받지 못했습니다.');
       }

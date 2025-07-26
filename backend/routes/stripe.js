@@ -1,27 +1,34 @@
 const express = require('express');
 const router = express.Router();
+
 // Stripe 초기화 (더미 키 처리)
-let stripe;
+let stripe = null;
+let isStripeEnabled = false;
+
 try {
-  if (process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY !== 'sk_test_development_key') {
+  if (process.env.STRIPE_SECRET_KEY && 
+      process.env.STRIPE_SECRET_KEY !== 'sk_test_development_key' &&
+      process.env.STRIPE_SECRET_KEY.startsWith('sk_')) {
     stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    isStripeEnabled = true;
+    console.log('✅ Stripe 초기화 성공');
   } else {
-    console.warn('⚠️ Stripe 더미 키 감지 - Stripe 기능 비활성화');
-    stripe = null;
+    console.warn('⚠️ Stripe 더미 키 감지 - Stripe 기능 비활성화 (데모 모드)');
   }
 } catch (error) {
-  console.error('Stripe 초기화 실패:', error);
-  stripe = null;
+  console.error('❌ Stripe 초기화 실패:', error.message);
 }
 
 // Create Stripe Checkout Session
 router.post('/create-checkout-session', async (req, res) => {
   try {
-    // Stripe가 초기화되지 않은 경우 더미 응답
-    if (!stripe) {
-      return res.status(503).json({ 
-        error: 'Stripe 서비스가 설정되지 않았습니다. 관리자에게 문의하세요.',
-        demoMode: true
+    // Stripe가 초기화되지 않은 경우 데모 응답
+    if (!isStripeEnabled) {
+      return res.status(200).json({ 
+        error: 'Stripe가 설정되지 않아 데모 모드로 실행중입니다.',
+        demoMode: true,
+        sessionId: 'demo_session_' + Date.now(),
+        message: '실제 결제는 Stripe 설정 후 가능합니다.'
       });
     }
 
@@ -70,6 +77,12 @@ router.post('/create-checkout-session', async (req, res) => {
 
 // Stripe Webhook Handler
 router.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
+  // Stripe가 비활성화된 경우
+  if (!isStripeEnabled) {
+    console.log('⚠️ Stripe 비활성화 상태에서 webhook 요청 받음 - 무시');
+    return res.status(200).json({ received: true, demoMode: true });
+  }
+
   const sig = req.headers['stripe-signature'];
   let event;
 
@@ -142,6 +155,15 @@ router.post('/webhook', express.raw({type: 'application/json'}), async (req, res
 // Get customer's subscription info
 router.get('/subscription/:customerId', async (req, res) => {
   try {
+    if (!isStripeEnabled) {
+      return res.status(200).json({
+        hasActiveSubscription: false,
+        plan: 'free',
+        demoMode: true,
+        message: 'Stripe 비활성화 - 데모 모드'
+      });
+    }
+
     const { customerId } = req.params;
     
     const subscriptions = await stripe.subscriptions.list({
@@ -187,6 +209,14 @@ router.get('/subscription/:customerId', async (req, res) => {
 // Cancel subscription
 router.post('/cancel-subscription', async (req, res) => {
   try {
+    if (!isStripeEnabled) {
+      return res.status(200).json({
+        success: true,
+        demoMode: true,
+        message: 'Stripe 비활성화 - 데모 모드에서 구독 취소됨'
+      });
+    }
+
     const { subscriptionId } = req.body;
     
     const subscription = await stripe.subscriptions.update(subscriptionId, {
