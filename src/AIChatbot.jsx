@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import OpenAI from 'openai';
+import { useSubscription, FeatureGate } from './SubscriptionContext';
 
 const AIChatbot = ({ isOpen, onClose }) => {
+  const { isWithinUsageLimit, trackUsage } = useSubscription();
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -31,6 +33,18 @@ const AIChatbot = ({ isOpen, onClose }) => {
   const handleSendMessage = async () => {
     if (!inputText.trim() || isLoading) return;
 
+    // Check usage limit before sending message
+    if (!isWithinUsageLimit('ai_chatbot')) {
+      const limitMessage = {
+        id: Date.now(),
+        text: "죄송합니다. AI 챗봇 사용 한도에 도달했습니다. 프로 플랜으로 업그레이드하시면 무제한으로 이용하실 수 있습니다. 🔒",
+        isBot: true,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, limitMessage]);
+      return;
+    }
+
     const userMessage = {
       id: Date.now(),
       text: inputText,
@@ -41,6 +55,9 @@ const AIChatbot = ({ isOpen, onClose }) => {
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
     setIsLoading(true);
+
+    // Track usage
+    await trackUsage('ai_chatbot');
 
     try {
       // 실제 OpenAI API 호출

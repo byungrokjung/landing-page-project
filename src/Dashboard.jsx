@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSubscription, FeatureGate, UsageIndicator } from './SubscriptionContext';
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -481,78 +482,253 @@ function ActivitySection({ activities }) {
 
 // 구독 정보 섹션 컴포넌트
 function SubscriptionSection({ user }) {
+  const { subscription, loading, getRemainingUsage } = useSubscription();
+  
+  const planNames = {
+    free: '무료 플랜',
+    pro: '프로 플랜',
+    enterprise: '엔터프라이즈'
+  };
+
+  const planColors = {
+    free: '#6c757d',
+    pro: '#3b82f6',
+    enterprise: '#8b5cf6'
+  };
+
+  const planIcons = {
+    free: '📱',
+    pro: '⭐',
+    enterprise: '👑'
+  };
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <div style={{
+          display: 'inline-block',
+          width: '32px',
+          height: '32px',
+          border: '3px solid #f3f3f3',
+          borderTop: '3px solid #3b82f6',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }}></div>
+        <p style={{ marginTop: '1rem', color: '#666' }}>구독 정보를 불러오는 중...</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <h2 style={{ marginBottom: '1.5rem', color: '#333', fontSize: '24px' }}>구독 정보</h2>
       
+      {/* 현재 플랜 정보 */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1))',
+        padding: '2rem',
+        borderRadius: '16px',
+        border: '1px solid rgba(59, 130, 246, 0.2)',
+        marginBottom: '2rem'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+          <div style={{ fontSize: '2rem' }}>{planIcons[subscription.plan]}</div>
+          <div>
+            <h3 style={{ color: '#333', marginBottom: '0.25rem', fontSize: '20px' }}>
+              {planNames[subscription.plan]}
+            </h3>
+            <div style={{ 
+              fontSize: '14px',
+              color: planColors[subscription.plan],
+              fontWeight: '600'
+            }}>
+              {subscription.status === 'active' ? '활성' : '비활성'}
+            </div>
+          </div>
+        </div>
+        
+        {subscription.plan !== 'free' && (
+          <div style={{
+            padding: '1rem',
+            background: 'rgba(255, 255, 255, 0.7)',
+            borderRadius: '8px',
+            fontSize: '14px',
+            color: '#666'
+          }}>
+            💡 프리미엄 기능을 모두 이용하실 수 있습니다!
+          </div>
+        )}
+      </div>
+
+      {/* 사용량 현황 */}
       <div style={{
         background: '#f8f9fa',
         padding: '2rem',
         borderRadius: '12px',
-        border: '1px solid #e9ecef'
+        border: '1px solid #e9ecef',
+        marginBottom: '2rem'
       }}>
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h3 style={{ color: '#333', marginBottom: '0.5rem' }}>현재 플랜</h3>
-          <div style={{ 
-            fontSize: '18px', 
-            fontWeight: '600',
-            color: user?.subscription_type === 'premium' ? '#28a745' : '#6c757d'
+        <h3 style={{ color: '#333', marginBottom: '1.5rem', fontSize: '18px' }}>사용량 현황</h3>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+          <div style={{
+            padding: '1rem',
+            background: 'white',
+            borderRadius: '8px',
+            border: '1px solid #dee2e6'
           }}>
-            {user?.subscription_type === 'premium' ? '프리미엄' : '무료 플랜'}
-          </div>
-        </div>
-
-        {user?.subscription_type === 'premium' && (
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h4 style={{ color: '#333', marginBottom: '0.5rem' }}>구독 만료일</h4>
-            <div style={{ fontSize: '16px', color: '#666' }}>
-              {user.subscription_end_date 
-                ? new Date(user.subscription_end_date).toLocaleDateString('ko-KR')
-                : '정보 없음'
-              }
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '14px', color: '#666' }}>케이스 스터디</span>
+              <span style={{ fontSize: '12px', color: '#999' }}>이번 달</span>
             </div>
+            <UsageIndicator featureName="case_studies" />
           </div>
-        )}
-
-        <div>
-          <h4 style={{ color: '#333', marginBottom: '1rem' }}>플랜 혜택</h4>
-          <ul style={{ color: '#555', lineHeight: '1.6' }}>
-            {user?.subscription_type === 'premium' ? (
-              <>
-                <li>✅ 모든 케이스 스터디 무제한 열람</li>
-                <li>✅ AI 비디오 생성 도구 사용</li>
-                <li>✅ 우선 고객 지원</li>
-                <li>✅ 월간 리포트 제공</li>
-              </>
-            ) : (
-              <>
-                <li>📖 기본 케이스 스터디 열람 (월 3개)</li>
-                <li>💬 AI 챗봇 기본 사용</li>
-                <li>📧 이메일 지원</li>
-              </>
-            )}
-          </ul>
+          
+          <div style={{
+            padding: '1rem',
+            background: 'white',
+            borderRadius: '8px',
+            border: '1px solid #dee2e6'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '14px', color: '#666' }}>AI 챗봇</span>
+              <span style={{ fontSize: '12px', color: '#999' }}>이번 달</span>
+            </div>
+            <UsageIndicator featureName="ai_chatbot" />
+          </div>
         </div>
+      </div>
 
-        {user?.subscription_type !== 'premium' && (
+      {/* 플랜 기능 */}
+      <div style={{
+        background: '#f8f9fa',
+        padding: '2rem',
+        borderRadius: '12px',
+        border: '1px solid #e9ecef',
+        marginBottom: '2rem'
+      }}>
+        <h3 style={{ color: '#333', marginBottom: '1.5rem', fontSize: '18px' }}>플랜 혜택</h3>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem' }}>
+          {Object.entries(subscription.features).map(([feature, value]) => {
+            const isEnabled = value === true || value === 'unlimited' || (typeof value === 'number' && value > 0);
+            
+            const featureLabels = {
+              case_studies_limit: '케이스 스터디',
+              ai_chatbot_limit: 'AI 챗봇',
+              premium_videos: '프리미엄 비디오',
+              priority_support: '우선 고객지원',
+              monthly_reports: '월간 리포트',
+              mentoring_sessions: '멘토링 세션',
+              team_accounts: '팀 계정',
+              custom_case_studies: '커스텀 케이스 스터디',
+              dedicated_manager: '전담 매니저',
+              weekly_consulting: '주간 컨설팅',
+              api_access: 'API 접근'
+            };
+
+            const label = featureLabels[feature];
+            if (!label) return null;
+
+            return (
+              <div key={feature} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.5rem',
+                background: isEnabled ? 'rgba(16, 185, 129, 0.1)' : 'rgba(156, 163, 175, 0.1)',
+                borderRadius: '6px',
+                fontSize: '14px'
+              }}>
+                <div style={{
+                  fontSize: '12px',
+                  color: isEnabled ? '#10b981' : '#9ca3af'
+                }}>
+                  {isEnabled ? '✓' : '✗'}
+                </div>
+                <span style={{ color: isEnabled ? '#059669' : '#6b7280' }}>
+                  {label}
+                </span>
+                {typeof value === 'number' && value > 0 && (
+                  <span style={{ 
+                    fontSize: '12px', 
+                    color: '#6b7280',
+                    marginLeft: 'auto'
+                  }}>
+                    {value}
+                  </span>
+                )}
+                {value === 'unlimited' && (
+                  <span style={{ 
+                    fontSize: '12px', 
+                    color: '#10b981',
+                    marginLeft: 'auto'
+                  }}>
+                    무제한
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 업그레이드 섹션 */}
+      {subscription.plan === 'free' && (
+        <div style={{
+          background: 'linear-gradient(135deg, #667eea, #764ba2)',
+          padding: '2rem',
+          borderRadius: '16px',
+          color: 'white',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🚀</div>
+          <h3 style={{ marginBottom: '1rem', fontSize: '20px' }}>더 많은 기능을 이용해보세요!</h3>
+          <p style={{ marginBottom: '1.5rem', opacity: 0.9 }}>
+            프로 플랜으로 업그레이드하고 모든 케이스 스터디와 프리미엄 기능을 무제한으로 사용하세요.
+          </p>
           <button
-            onClick={() => alert('결제 시스템은 준비 중입니다.')}
+            onClick={() => window.location.href = '/subscription'}
             style={{
-              background: '#667eea',
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: '2px solid rgba(255, 255, 255, 0.3)',
               color: 'white',
-              border: 'none',
-              padding: '0.75rem 1.5rem',
+              padding: '12px 24px',
               borderRadius: '8px',
-              cursor: 'pointer',
               fontSize: '16px',
-              fontWeight: '500',
-              marginTop: '1rem'
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+              e.target.style.transform = 'translateY(0)';
             }}
           >
-            프리미엄으로 업그레이드
+            지금 업그레이드하기
           </button>
-        )}
-      </div>
+        </div>
+      )}
+
+      {subscription.plan !== 'free' && (
+        <div style={{
+          background: '#f0f9ff',
+          padding: '1.5rem',
+          borderRadius: '12px',
+          border: '1px solid #bae6fd',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>✨</div>
+          <h4 style={{ color: '#0369a1', marginBottom: '0.5rem' }}>프리미엄 멤버</h4>
+          <p style={{ color: '#0369a1', fontSize: '14px' }}>
+            모든 기능을 자유롭게 이용하고 계십니다!
+          </p>
+        </div>
+      )}
     </div>
   );
 }

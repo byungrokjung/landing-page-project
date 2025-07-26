@@ -266,21 +266,62 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* 모바일 타이포그래피 */
   .hero h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
   }
   
   .hero p {
     font-size: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0 10px;
   }
   
   .section-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 40px;
   }
   
+  /* 모바일 그리드 레이아웃 */
   .features-grid,
   .cases-grid,
   .testimonials-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  /* 모바일 섹션 패딩 */
+  .section {
+    padding: 60px 0;
+  }
+  
+  /* 모바일 컨테이너 */
+  .container {
+    padding: 0 15px;
+  }
+  
+  /* 모바일 CTA 버튼 */
+  .cta-button {
+    padding: 14px 24px;
+    font-size: 1rem;
+    margin: 5px;
+    display: block;
+    text-align: center;
+  }
+  
+  /* 모바일 카드 최적화 */
+  .feature-card,
+  .case-card,
+  .testimonial-card {
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* 모바일 멤버 카운트 */
+  .member-count {
+    font-size: 0.8rem;
+    margin-top: 1.5rem;
   }
 }

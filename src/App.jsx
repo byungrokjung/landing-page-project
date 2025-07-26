@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FlowBenchmark from "./flow/FlowBenchmark";
 import GoogleLogin from "./GoogleLogin";
 import AIChatbot from "./AIChatbot";
+import { SubscriptionProvider } from "./SubscriptionContext";
 
 function App() {
   const [serverStatus, setServerStatus] = useState('확인 중...');
@@ -96,10 +97,11 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={
-          <div className="App">
+    <SubscriptionProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={
+            <div className="App">
             <style>
               {`
                 @keyframes pulse {
@@ -126,6 +128,25 @@ function App() {
                   background: transparent;
                   min-height: 100vh;
                   width: 100%;
+                }
+                
+                /* 모바일 최적화 */
+                @media (max-width: 768px) {
+                  .fullscreen-video {
+                    object-fit: cover;
+                    transform: none;
+                  }
+                  
+                  .content-overlay {
+                    background: rgba(0, 0, 0, 0.4);
+                  }
+                }
+                
+                @media (max-width: 480px) {
+                  .fullscreen-video {
+                    object-position: center center;
+                    min-height: 100vh;
+                  }
                 }
               `}
             </style>
@@ -454,6 +475,13 @@ function App() {
                     <a href="/videos" className="cta-button">
                       지금 무료로 시작하기
                     </a>
+                    <a href="/subscription" className="cta-button" style={{
+                      background: 'linear-gradient(45deg, #667eea, #764ba2)',
+                      boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+                      border: 'none'
+                    }}>
+                      💎 프리미엄 구독
+                    </a>
                     <a href="/creative-studio" className="cta-button" style={{
                       background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
                       boxShadow: '0 4px 15px rgba(255, 107, 107, 0.3)',
@@ -654,6 +682,7 @@ function App() {
         <Route path="/flow" element={<FlowBenchmark />} />
       </Routes>
     </BrowserRouter>
+    </SubscriptionProvider>
   )
 }
 
