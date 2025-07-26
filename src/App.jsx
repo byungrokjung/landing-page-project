@@ -4,6 +4,7 @@ import FlowBenchmark from "./flow/FlowBenchmark";
 import GoogleLogin from "./GoogleLogin";
 import AIChatbot from "./AIChatbot";
 import { SubscriptionProvider } from "./SubscriptionContext";
+import { TouchEnhancedButton } from "./TouchEnhancements";
 
 function App() {
   const [serverStatus, setServerStatus] = useState('확인 중...');

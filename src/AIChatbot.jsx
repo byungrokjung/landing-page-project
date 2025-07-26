@@ -133,13 +133,20 @@ const AIChatbot = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  // 모바일 감지
+  const isMobile = window.innerWidth <= 768;
+
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: '20px',
-      right: '20px',
-      width: '380px',
-      height: '500px',
+    <div 
+      className="chatbot-container"
+      style={{
+        position: 'fixed',
+        bottom: isMobile ? '10px' : '20px',
+        right: isMobile ? '10px' : '20px',
+        left: isMobile ? '10px' : 'auto',
+      width: isMobile ? 'auto' : '380px',
+      height: isMobile ? '70vh' : '500px',
+      maxHeight: isMobile ? '500px' : 'none',
       backgroundColor: '#ffffff',
       borderRadius: '20px',
       boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15)',

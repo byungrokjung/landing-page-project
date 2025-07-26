@@ -304,11 +304,17 @@ body {
   
   /* 모바일 CTA 버튼 */
   .cta-button {
-    padding: 14px 24px;
+    padding: 16px 28px;
     font-size: 1rem;
-    margin: 5px;
+    margin: 8px;
     display: block;
     text-align: center;
+    min-height: 48px; /* 터치 최소 크기 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation; /* 터치 최적화 */
+    -webkit-tap-highlight-color: transparent;
   }
   
   /* 모바일 카드 최적화 */
@@ -323,5 +329,73 @@ body {
   .member-count {
     font-size: 0.8rem;
     margin-top: 1.5rem;
+  }
+
+  /* 터치 타겟 최적화 */
+  button, .cta-button, a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+
+  /* 스크롤 최적화 */
+  .section {
+    scroll-margin-top: 20px;
+  }
+
+  /* 모바일 입력 필드 최적화 */
+  input, textarea, select {
+    font-size: 16px; /* iOS 줌 방지 */
+    border-radius: 8px;
+    padding: 12px;
+  }
+}
+
+/* 추가 모바일 개선사항 */
+@media (max-width: 480px) {
+  /* 초소형 화면 최적화 */
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+  
+  .cta-button {
+    padding: 18px 24px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  /* 카드 간격 줄이기 */
+  .feature-card,
+  .case-card,
+  .testimonial-card {
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  /* AI 챗봇 모바일 최적화 */
+  .chatbot-container {
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+  }
+}
+
+/* 가로 모드 최적화 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    min-height: 100vh;
+    padding: 40px 0;
+  }
+  
+  .hero h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cta-button {
+    padding: 12px 20px;
+    margin: 4px;
   }
 }
