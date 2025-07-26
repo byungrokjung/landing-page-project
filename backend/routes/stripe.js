@@ -1,10 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+// Stripe 초기화 (더미 키 처리)
+let stripe;
+try {
+  if (process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY !== 'sk_test_development_key') {
+    stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  } else {
+    console.warn('⚠️ Stripe 더미 키 감지 - Stripe 기능 비활성화');
+    stripe = null;
+  }
+} catch (error) {
+  console.error('Stripe 초기화 실패:', error);
+  stripe = null;
+}
 
 // Create Stripe Checkout Session
 router.post('/create-checkout-session', async (req, res) => {
   try {
+    // Stripe가 초기화되지 않은 경우 더미 응답
+    if (!stripe) {
+      return res.status(503).json({ 
+        error: 'Stripe 서비스가 설정되지 않았습니다. 관리자에게 문의하세요.',
+        demoMode: true
+      });
+    }
+
     const { priceId, planName } = req.body;
     
     // 사용자 인증 확인 (선택적)
