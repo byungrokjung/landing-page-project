@@ -152,7 +152,7 @@ function App() {
               `}
             </style>
             
-            {/* 전체화면 배경 동영상 */}
+            {/* Hero 섹션까지만 배경 동영상 */}
             <video 
               autoPlay 
               muted 
@@ -163,8 +163,7 @@ function App() {
                 top: 0,
                 left: 0,
                 width: '100vw',
-                height: '100%',
-                minHeight: '300vh',
+                height: '100vh',
                 objectFit: 'cover',
                 zIndex: -1,
                 backgroundColor: '#000'
@@ -464,128 +463,629 @@ function App() {
               )}
             </div>
             {/* Hero Section */}
-            <section className="hero">
+            <section className="hero" style={{
+              minHeight: '100vh',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0'
+            }}>
               <div className="container">
-                <div className="hero-content">
-                  <h1>'이미 검증된' 비즈니스성공 사례를 무제한으로</h1>
-                  <p>
-                    1인 기업가부터 최신 AI 스타트업까지,<br />
-                    전 세계 모든 성공 케이스를 확인하고 비즈니스에 적용해보세요.
+                <div className="hero-content" style={{
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85))',
+                  backdropFilter: 'blur(20px)',
+                  borderRadius: '32px',
+                  padding: '80px 60px',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  boxShadow: '0 32px 80px rgba(0, 0, 0, 0.15)',
+                  textAlign: 'center',
+                  maxWidth: '900px',
+                  margin: '0 auto'
+                }}>
+                  <h1 style={{
+                    fontSize: 'clamp(3rem, 6vw, 5rem)',
+                    fontWeight: '900',
+                    lineHeight: '1.1',
+                    background: 'linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    marginBottom: '32px',
+                    letterSpacing: '-0.02em'
+                  }}>
+                    Discover Amazing<br />
+                    <span style={{
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text'
+                    }}>
+                      Digital Experience
+                    </span>
+                  </h1>
+                  
+                  <p style={{
+                    fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)',
+                    lineHeight: '1.7',
+                    color: '#6b7280',
+                    marginBottom: '48px',
+                    maxWidth: '600px',
+                    margin: '0 auto 48px',
+                    fontWeight: '400'
+                  }}>
+                    Explore cutting-edge technology and creative solutions.<br />
+                    Transform your ideas into reality with our powerful tools.
                   </p>
-                  <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                    <a href="/videos" className="cta-button">
-                      지금 무료로 시작하기
+
+                  {/* 메인 CTA 버튼들 */}
+                  <div style={{ 
+                    display: 'flex', 
+                    gap: '24px', 
+                    justifyContent: 'center', 
+                    flexWrap: 'wrap',
+                    marginBottom: '40px'
+                  }}>
+                    <a href="/videos" 
+                       className="cta-button" 
+                       style={{
+                         background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                         color: 'white',
+                         padding: '20px 40px',
+                         fontSize: '1.1rem',
+                         fontWeight: '700',
+                         borderRadius: '60px',
+                         textDecoration: 'none',
+                         boxShadow: '0 12px 40px rgba(102, 126, 234, 0.3)',
+                         border: 'none',
+                         transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                         minWidth: '200px',
+                         textAlign: 'center',
+                         position: 'relative',
+                         overflow: 'hidden'
+                       }}
+                       onMouseEnter={(e) => {
+                         e.target.style.transform = 'translateY(-4px) scale(1.02)';
+                         e.target.style.boxShadow = '0 20px 60px rgba(102, 126, 234, 0.4)';
+                       }}
+                       onMouseLeave={(e) => {
+                         e.target.style.transform = 'translateY(0) scale(1)';
+                         e.target.style.boxShadow = '0 12px 40px rgba(102, 126, 234, 0.3)';
+                       }}
+                    >
+                      🚀 Get Started Free
                     </a>
-                    <a href="/subscription" className="cta-button" style={{
-                      background: 'linear-gradient(45deg, #667eea, #764ba2)',
-                      boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
-                      border: 'none'
-                    }}>
-                      💎 프리미엄 구독
-                    </a>
-                    <a href="/creative-studio" className="cta-button" style={{
-                      background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
-                      boxShadow: '0 4px 15px rgba(255, 107, 107, 0.3)',
-                      border: 'none'
-                    }}>
-                      🎬 AI Creative Studio
-                    </a>
-                    <a href="/ai-video-generator" className="cta-button" style={{
-                      background: 'linear-gradient(45deg, #ffa500, #ff6b47)',
-                      boxShadow: '0 4px 15px rgba(255, 165, 0, 0.3)',
-                      border: 'none'
-                    }}>
-                      🚀 AI Video Generator
+                    
+                    <a href="/subscription" 
+                       className="cta-button" 
+                       style={{
+                         background: 'linear-gradient(135deg, #f093fb, #f5576c)',
+                         color: 'white',
+                         padding: '20px 40px',
+                         fontSize: '1.1rem',
+                         fontWeight: '700',
+                         borderRadius: '60px',
+                         textDecoration: 'none',
+                         boxShadow: '0 12px 40px rgba(240, 147, 251, 0.3)',
+                         border: 'none',
+                         transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                         minWidth: '200px',
+                         textAlign: 'center',
+                         position: 'relative',
+                         overflow: 'hidden'
+                       }}
+                       onMouseEnter={(e) => {
+                         e.target.style.transform = 'translateY(-4px) scale(1.02)';
+                         e.target.style.boxShadow = '0 20px 60px rgba(240, 147, 251, 0.4)';
+                       }}
+                       onMouseLeave={(e) => {
+                         e.target.style.transform = 'translateY(0) scale(1)';
+                         e.target.style.boxShadow = '0 12px 40px rgba(240, 147, 251, 0.3)';
+                       }}
+                    >
+                      💎 Go Premium
                     </a>
                   </div>
-                  <div className="member-count">
-                    500명 이상의 멤버들이 함께하고 있습니다!
+
+                  {/* 보조 링크들 */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '32px',
+                    justifyContent: 'center',
+                    flexWrap: 'wrap',
+                    marginBottom: '40px'
+                  }}>
+                    <a href="/creative-studio" style={{
+                      color: '#6b7280',
+                      textDecoration: 'none',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      padding: '12px 24px',
+                      borderRadius: '24px',
+                      background: 'rgba(255, 255, 255, 0.6)',
+                      border: '1px solid rgba(255, 255, 255, 0.8)',
+                      transition: 'all 0.3s ease',
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.9)';
+                      e.target.style.color = '#374151';
+                      e.target.style.transform = 'translateY(-2px)';
+                      e.target.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.12)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.6)';
+                      e.target.style.color = '#6b7280';
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+                    }}
+                    >
+                      🎬 Creative Studio
+                    </a>
+                    <a href="/ai-video-generator" style={{
+                      color: '#6b7280',
+                      textDecoration: 'none',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      padding: '12px 24px',
+                      borderRadius: '24px',
+                      background: 'rgba(255, 255, 255, 0.6)',
+                      border: '1px solid rgba(255, 255, 255, 0.8)',
+                      transition: 'all 0.3s ease',
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.9)';
+                      e.target.style.color = '#374151';
+                      e.target.style.transform = 'translateY(-2px)';
+                      e.target.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.12)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.6)';
+                      e.target.style.color = '#6b7280';
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+                    }}
+                    >
+                      ⚡ AI Video Generator
+                    </a>
                   </div>
-                  <div style={{marginTop: '20px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px'}}>
-                    서버 상태: {serverStatus}
+
+                  {/* 사용자 수 표시 */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '16px',
+                    color: '#9ca3af',
+                    fontSize: '0.95rem',
+                    fontWeight: '500'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      marginRight: '12px'
+                    }}>
+                      {[...Array(5)].map((_, i) => (
+                        <div key={i} style={{
+                          width: '36px',
+                          height: '36px',
+                          borderRadius: '50%',
+                          background: `linear-gradient(135deg, hsl(${200 + i * 40}, 70%, 60%), hsl(${220 + i * 40}, 70%, 50%))`,
+                          marginLeft: i > 0 ? '-12px' : '0',
+                          border: '3px solid rgba(255, 255, 255, 0.8)',
+                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                          zIndex: 5 - i,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: 'white'
+                        }}>
+                          {String.fromCharCode(65 + i)}
+                        </div>
+                      ))}
+                    </div>
+                    <span>Join 500+ users already exploring</span>
                   </div>
                 </div>
               </div>
             </section>
             {/* Features Section */}
-            <section className="features section">
+            <section className="features section" style={{
+              background: '#000000',
+              padding: '120px 0',
+              position: 'relative'
+            }}>
               <div className="container">
-                <h2 className="section-title">히든 리치스만의 특별한 가치</h2>
-                <div className="features-grid">
-                  <div className="feature-card">
-                    <div className="feature-icon">📊</div>
-                    <h3>이미 시장 검증된, 150+ 가지 이상의 온라인 비즈니스 아이디어</h3>
-                    <p>
-                      해외에서 실제로 매출을 내고있는 150개 이상의 성공 케이스에 무제한으로 접근하세요. 
-                      '잘 될까?'와 같은 추측이 아닌, '이미 잘 팔린 구조'를 벤치마킹하는 것부터 시작해보세요.
+                <h2 style={{
+                  fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+                  fontWeight: '800',
+                  textAlign: 'center',
+                  color: '#ffffff',
+                  marginBottom: '80px',
+                  letterSpacing: '-0.02em'
+                }}>
+                  Why Choose Our Platform?
+                </h2>
+                
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                  gap: '32px',
+                  maxWidth: '1200px',
+                  margin: '0 auto'
+                }}>
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    padding: '40px 32px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 32px 80px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: '3rem',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>🚀</div>
+                    <h3 style={{
+                      fontSize: '1.4rem',
+                      fontWeight: '700',
+                      color: '#1a1a1a',
+                      marginBottom: '16px',
+                      lineHeight: '1.3'
+                    }}>
+                      Lightning Fast Performance
+                    </h3>
+                    <p style={{
+                      color: '#6b7280',
+                      lineHeight: '1.6',
+                      fontSize: '1rem'
+                    }}>
+                      Experience blazing-fast load times and smooth interactions. 
+                      Built with cutting-edge technology for optimal performance.
                     </p>
                   </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">🎯</div>
-                    <h3>바닥부터 시작한 사업가들의 '실전 마케팅 전략' 그대로 공개</h3>
-                    <p>
-                      광고 없이 시작한 사례, SNS로 시작한 사례, 모든 전략과 흐름을 A부터 Z까지 확인할 수 있습니다.
+
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    padding: '40px 32px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 32px 80px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: '3rem',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>🎨</div>
+                    <h3 style={{
+                      fontSize: '1.4rem',
+                      fontWeight: '700',
+                      color: '#1a1a1a',
+                      marginBottom: '16px',
+                      lineHeight: '1.3'
+                    }}>
+                      Beautiful Design System
+                    </h3>
+                    <p style={{
+                      color: '#6b7280',
+                      lineHeight: '1.6',
+                      fontSize: '1rem'
+                    }}>
+                      Stunning UI components and layouts that make your content shine. 
+                      Modern aesthetics meet functional design.
                     </p>
                   </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">🎓</div>
-                    <h3>억대 수익을 낸 사업가들의 고급 비즈니스 강의도 함께</h3>
-                    <p>
-                      케이스 스터디만으로는 막막할 수 있습니다. 그래서 히든 리치스는 Alex Hormozi 등 
-                      글로벌 사업가들의 강의를 한글 자막과 함께 시청, 요약 스크립트까지 제공해드립니다.
+
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    padding: '40px 32px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 32px 80px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: '3rem',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>🤖</div>
+                    <h3 style={{
+                      fontSize: '1.4rem',
+                      fontWeight: '700',
+                      color: '#1a1a1a',
+                      marginBottom: '16px',
+                      lineHeight: '1.3'
+                    }}>
+                      AI-Powered Features
+                    </h3>
+                    <p style={{
+                      color: '#6b7280',
+                      lineHeight: '1.6',
+                      fontSize: '1rem'
+                    }}>
+                      Harness the power of artificial intelligence to boost your productivity 
+                      and create amazing content effortlessly.
                     </p>
                   </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">🚀</div>
-                    <h3>사업의 '시작'을 만드는 실행 피드백과 트래픽</h3>
-                    <p>
-                      히든 리치스에서는 같은 방향을 향하는 멤버들에게 론칭 소식을 알리고, 
-                      실시간 피드백을 주고받을 수 있는 전용 커뮤니티를 운영합니다.
+
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    padding: '40px 32px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 32px 80px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: '3rem',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>🔒</div>
+                    <h3 style={{
+                      fontSize: '1.4rem',
+                      fontWeight: '700',
+                      color: '#1a1a1a',
+                      marginBottom: '16px',
+                      lineHeight: '1.3'
+                    }}>
+                      Enterprise Security
+                    </h3>
+                    <p style={{
+                      color: '#6b7280',
+                      lineHeight: '1.6',
+                      fontSize: '1rem'
+                    }}>
+                      Your data is protected with bank-level security. 
+                      SSL encryption and secure authentication systems.
                     </p>
                   </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">📅</div>
-                    <h3>주 3회, 최신 전략을 실시간으로</h3>
-                    <p>
-                      매주 월·수·금, 최신 아이템과 성공 전략을 이메일로 바로 받아보세요. 
-                      놓쳐도 걱정 마세요. 모든 콘텐츠는 아카이브에서 다시 볼 수 있습니다.
+
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    padding: '40px 32px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 32px 80px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: '3rem',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>📱</div>
+                    <h3 style={{
+                      fontSize: '1.4rem',
+                      fontWeight: '700',
+                      color: '#1a1a1a',
+                      marginBottom: '16px',
+                      lineHeight: '1.3'
+                    }}>
+                      Mobile Optimized
+                    </h3>
+                    <p style={{
+                      color: '#6b7280',
+                      lineHeight: '1.6',
+                      fontSize: '1rem'
+                    }}>
+                      Perfect experience across all devices. 
+                      Responsive design that works flawlessly on mobile and desktop.
                     </p>
                   </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">💎</div>
-                    <h3>첫 달, 부담 없이 경험해보세요</h3>
-                    <p>
-                      처음이라 고민되시나요? 히든 리치스는 첫 30일 무료 체험 기간을 제공합니다. 
-                      리스크 0%, 먼저 경험해보세요.
+
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    padding: '40px 32px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 32px 80px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: '3rem',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>💎</div>
+                    <h3 style={{
+                      fontSize: '1.4rem',
+                      fontWeight: '700',
+                      color: '#1a1a1a',
+                      marginBottom: '16px',
+                      lineHeight: '1.3'
+                    }}>
+                      Premium Experience
+                    </h3>
+                    <p style={{
+                      color: '#6b7280',
+                      lineHeight: '1.6',
+                      fontSize: '1rem'
+                    }}>
+                      Try our platform risk-free for 30 days. 
+                      No commitments, cancel anytime, premium features included.
                     </p>
                   </div>
                 </div>
               </div>
             </section>
-            {/* Case Studies Section */}
-            <section className="cases section">
+            {/* Featured Content Section */}
+            <section style={{
+              background: '#000000',
+              padding: '120px 0',
+              position: 'relative'
+            }}>
               <div className="container">
-                <h2 className="section-title">최신 케이스 스터디</h2>
-                <div className="cases-grid">
+                <h2 style={{
+                  fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+                  fontWeight: '800',
+                  textAlign: 'center',
+                  color: '#ffffff',
+                  marginBottom: '80px',
+                  letterSpacing: '-0.02em'
+                }}>
+                  Latest Featured Content
+                </h2>
+                
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                  gap: '32px',
+                  maxWidth: '1200px',
+                  margin: '0 auto'
+                }}>
                   {loading ? (
-                    <div style={{textAlign: 'center', padding: '20px', gridColumn: '1 / -1'}}>
-                      케이스 스터디를 불러오는 중...
+                    <div style={{
+                      textAlign: 'center', 
+                      padding: '60px 20px', 
+                      gridColumn: '1 / -1',
+                      color: '#6b7280',
+                      fontSize: '1.1rem'
+                    }}>
+                      Loading amazing content...
                     </div>
                   ) : (
                     popularCases.map((caseStudy, index) => (
-                      <div key={caseStudy.id} className="case-card">
-                        <div className="case-image">
+                      <div key={caseStudy.id} style={{
+                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                        backdropFilter: 'blur(20px)',
+                        borderRadius: '24px',
+                        padding: '32px',
+                        border: '1px solid rgba(255, 255, 255, 0.3)',
+                        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-8px)';
+                        e.currentTarget.style.boxShadow = '0 32px 80px rgba(0, 0, 0, 0.15)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                      }}
+                      >
+                        <div style={{
+                          position: 'absolute',
+                          top: '20px',
+                          right: '20px',
+                          background: caseStudy.is_new ? 'linear-gradient(135deg, #10b981, #059669)' : 
+                                     caseStudy.views > 2000 ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 
+                                     'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                          color: 'white',
+                          padding: '6px 12px',
+                          borderRadius: '12px',
+                          fontSize: '0.75rem',
+                          fontWeight: '600'
+                        }}>
                           {caseStudy.is_new ? 'NEW' : 
                            caseStudy.views > 2000 ? 'HOT' : 
-                           caseStudy.likes > 100 ? '인기' : '추천'}
+                           caseStudy.likes > 100 ? 'Popular' : 'Featured'}
                         </div>
-                        <div className="case-content">
-                          <span className="case-tag">
-                            {caseStudy.category} · {caseStudy.revenue_period} {caseStudy.revenue_amount.toLocaleString()}원
+                        
+                        <div style={{ marginTop: '20px' }}>
+                          <span style={{
+                            display: 'inline-block',
+                            background: 'rgba(102, 126, 234, 0.1)',
+                            color: '#667eea',
+                            padding: '6px 12px',
+                            borderRadius: '20px',
+                            fontSize: '0.8rem',
+                            fontWeight: '600',
+                            marginBottom: '16px'
+                          }}>
+                            {caseStudy.category} • ${caseStudy.revenue_amount?.toLocaleString() || '0'}/{caseStudy.revenue_period || 'month'}
                           </span>
-                          <h3>{caseStudy.title}</h3>
-                          <div className="case-meta">
-                            {caseStudy.founder} · {new Date(caseStudy.published_at).toLocaleDateString('ko-KR')}
+                          
+                          <h3 style={{
+                            fontSize: '1.3rem',
+                            fontWeight: '700',
+                            color: '#1a1a1a',
+                            marginBottom: '12px',
+                            lineHeight: '1.4'
+                          }}>
+                            {caseStudy.title}
+                          </h3>
+                          
+                          <div style={{
+                            color: '#6b7280',
+                            fontSize: '0.9rem',
+                            fontWeight: '500'
+                          }}>
+                            {caseStudy.founder} • {new Date(caseStudy.published_at).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric', 
+                              year: 'numeric' 
+                            })}
                           </div>
                         </div>
                       </div>
@@ -594,31 +1094,243 @@ function App() {
                 </div>
               </div>
             </section>
+
             {/* Testimonials Section */}
-            <section className="testimonials section">
+            <section style={{
+              background: '#000000',
+              padding: '120px 0',
+              position: 'relative'
+            }}>
               <div className="container">
-                <h2 className="section-title">구독자들의 생생한 반응</h2>
-                <div className="testimonials-grid">
-                  <div className="testimonial-card">
-                    <blockquote>
-                      "히든 리치스 덕분에 실제로 해외에서 성공한 사업 모델들을 빠르게 파악할 수 있었어요. 
-                      특히 마케팅 전략 부분이 정말 도움이 되었습니다."
+                <h2 style={{
+                  fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+                  fontWeight: '800',
+                  textAlign: 'center',
+                  color: '#ffffff',
+                  marginBottom: '80px',
+                  letterSpacing: '-0.02em'
+                }}>
+                  What Our Users Say
+                </h2>
+                
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+                  gap: '32px',
+                  maxWidth: '1200px',
+                  margin: '0 auto'
+                }}>
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    padding: '40px 32px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 28px 70px rgba(0, 0, 0, 0.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: '3rem',
+                      color: '#667eea',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>⭐⭐⭐⭐⭐</div>
+                    
+                    <blockquote style={{
+                      fontSize: '1.1rem',
+                      lineHeight: '1.7',
+                      color: '#374151',
+                      fontStyle: 'italic',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>
+                      "This platform completely transformed how I approach digital projects. 
+                      The AI features are incredibly intuitive and save me hours of work every day."
                     </blockquote>
-                    <div className="testimonial-author">- 김○○님</div>
+                    
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '12px'
+                    }}>
+                      <div style={{
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontWeight: '600',
+                        fontSize: '1.2rem'
+                      }}>
+                        A
+                      </div>
+                      <div>
+                        <div style={{
+                          fontWeight: '600',
+                          color: '#1a1a1a'
+                        }}>Alex Chen</div>
+                        <div style={{
+                          fontSize: '0.9rem',
+                          color: '#6b7280'
+                        }}>Product Designer</div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="testimonial-card">
-                    <blockquote>
-                      "온라인 비즈니스 초보였는데, 케이스 스터디를 보면서 어떤 방향으로 가야 할지 
-                      명확해졌어요. 실전 예시가 정말 많아서 좋습니다."
+
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    padding: '40px 32px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 28px 70px rgba(0, 0, 0, 0.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: '3rem',
+                      color: '#667eea',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>⭐⭐⭐⭐⭐</div>
+                    
+                    <blockquote style={{
+                      fontSize: '1.1rem',
+                      lineHeight: '1.7',
+                      color: '#374151',
+                      fontStyle: 'italic',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>
+                      "Amazing user experience and fantastic results. 
+                      The creative tools are exactly what I needed for my startup projects."
                     </blockquote>
-                    <div className="testimonial-author">- 박○○님</div>
+                    
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '12px'
+                    }}>
+                      <div style={{
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, #f093fb, #f5576c)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontWeight: '600',
+                        fontSize: '1.2rem'
+                      }}>
+                        S
+                      </div>
+                      <div>
+                        <div style={{
+                          fontWeight: '600',
+                          color: '#1a1a1a'
+                        }}>Sarah Johnson</div>
+                        <div style={{
+                          fontSize: '0.9rem',
+                          color: '#6b7280'
+                        }}>Startup Founder</div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="testimonial-card">
-                    <blockquote>
-                      "매주 오는 이메일 뉴스레터가 정말 알차요. 최신 트렌드와 성공 사례를 
-                      놓치지 않고 받아볼 수 있어서 감사합니다."
+
+                  <div style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    padding: '40px 32px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+                    transition: 'all 0.3s ease',
+                    position: 'relative'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 28px 70px rgba(0, 0, 0, 0.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.1)';
+                  }}
+                  >
+                    <div style={{
+                      fontSize: '3rem',
+                      color: '#667eea',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>⭐⭐⭐⭐⭐</div>
+                    
+                    <blockquote style={{
+                      fontSize: '1.1rem',
+                      lineHeight: '1.7',
+                      color: '#374151',
+                      fontStyle: 'italic',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>
+                      "The video generation features are incredible! 
+                      I've been able to create professional content in minutes instead of hours."
                     </blockquote>
-                    <div className="testimonial-author">- 이○○님</div>
+                    
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '12px'
+                    }}>
+                      <div style={{
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, #4ade80, #22c55e)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontWeight: '600',
+                        fontSize: '1.2rem'
+                      }}>
+                        M
+                      </div>
+                      <div>
+                        <div style={{
+                          fontWeight: '600',
+                          color: '#1a1a1a'
+                        }}>Mike Rodriguez</div>
+                        <div style={{
+                          fontSize: '0.9rem',
+                          color: '#6b7280'
+                        }}>Content Creator</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

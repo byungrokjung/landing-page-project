@@ -7,7 +7,7 @@ const AIChatbot = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "안녕하세요! 저는 히든 리치스 AI 도우미입니다. 비즈니스 케이스 스터디에 대해 궁금한 것이 있으시면 언제든 물어보세요! 🚀",
+      text: "Hi there! I'm your AI assistant, ready to help with any questions about our platform, creative tools, or digital solutions. Feel free to ask anything! 🚀",
       isBot: true,
       timestamp: new Date()
     }
@@ -37,7 +37,7 @@ const AIChatbot = ({ isOpen, onClose }) => {
     if (!isWithinUsageLimit('ai_chatbot')) {
       const limitMessage = {
         id: Date.now(),
-        text: "죄송합니다. AI 챗봇 사용 한도에 도달했습니다. 프로 플랜으로 업그레이드하시면 무제한으로 이용하실 수 있습니다. 🔒",
+        text: "Sorry, you've reached your AI chatbot usage limit. Upgrade to Pro plan for unlimited access to all features! 🔒",
         isBot: true,
         timestamp: new Date()
       };
@@ -66,25 +66,25 @@ const AIChatbot = ({ isOpen, onClose }) => {
         messages: [
           {
             role: "system",
-            content: `당신은 "히든 리치스"라는 비즈니스 케이스 스터디 플랫폼의 AI 도우미입니다. 
+            content: `You are a helpful AI assistant for a modern digital platform. 
 
-            중요한 지침:
-            1. 확실하지 않은 구체적인 사실, 수치, 회사명은 절대 지어내지 마세요
-            2. 모르는 것은 솔직히 "정확한 정보는 확인이 필요합니다"라고 말하세요
-            3. 일반적인 비즈니스 원칙과 조언 위주로 답변하세요
-            4. 구체적인 케이스를 언급할 때는 "예를 들어" 또는 "일반적으로"라는 표현을 사용하세요
+            Important Guidelines:
+            1. Never make up specific facts, numbers, or company names that you're not certain about
+            2. When unsure, honestly say "I'd need to verify that information"
+            3. Focus on general principles and practical advice
+            4. Use phrases like "for example" or "typically" when mentioning specific cases
 
-            역할:
-            - 비즈니스 전략 및 마케팅 방법론 설명
-            - 온라인 비즈니스 모델의 일반적인 패턴 소개  
-            - 창업 관련 실용적인 조언 제공
-            - 1인 기업, 스타트업 관련 일반론적 가이드
+            Your Role:
+            - Provide technology and creative solutions guidance
+            - Explain digital tools and AI features
+            - Offer practical advice for productivity and creativity
+            - Help with general questions about digital platforms and modern tools
 
-            답변 스타일:
-            - 친근하고 전문적인 톤
-            - 한국어 사용
-            - 이모지 적절히 활용
-            - 불확실한 정보는 명시적으로 언급`
+            Response Style:
+            - Friendly and professional tone
+            - Use English primarily (respond in user's language if they ask in another language)
+            - Use emojis appropriately
+            - Be clear about uncertainty when it exists`
           },
           {
             role: "user",
@@ -112,7 +112,7 @@ const AIChatbot = ({ isOpen, onClose }) => {
       
       const errorResponse = {
         id: Date.now() + 1,
-        text: "죄송합니다. 현재 AI 서비스에 문제가 있어 답변을 드릴 수 없습니다. 잠시 후 다시 시도해 주세요. 🤖",
+        text: "Sorry, I'm experiencing some technical difficulties right now. Please try again in a moment! 🤖",
         isBot: true,
         timestamp: new Date()
       };
