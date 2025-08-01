@@ -27,6 +27,9 @@ console.log('🔧 환경변수 상태:');
 console.log('- PORT:', process.env.PORT || '5000');
 console.log('- SUPABASE_URL:', process.env.SUPABASE_URL ? '✅ 설정됨' : '❌ 없음');
 console.log('- STRIPE_SECRET_KEY:', process.env.STRIPE_SECRET_KEY === 'sk_test_development_key' ? '⚠️ 더미키' : '✅ 설정됨');
+console.log('- N8N_WEBHOOK_URL:', process.env.N8N_WEBHOOK_URL ? '✅ 설정됨' : '❌ 없음');
+console.log('- N8N_BASE_URL:', process.env.N8N_BASE_URL ? '✅ 설정됨' : '❌ 없음');
+console.log('- N8N_API_KEY:', process.env.N8N_API_KEY ? '✅ 설정됨' : '❌ 없음');
 console.log('- NODE_ENV:', process.env.NODE_ENV || 'development');
 
 // Routes
@@ -37,6 +40,36 @@ app.use('/api/content', require('./routes/content'));
 app.use('/api/email', require('./routes/email'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/stripe', require('./routes/stripe'));
+
+// N8N 라우트 로딩 시도
+try {
+  console.log('🔄 Loading n8n routes...');
+  const n8nRoutes = require('./routes/n8n');
+  app.use('/api/n8n', n8nRoutes);
+  console.log('✅ N8N routes loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load n8n routes:', error.message);
+}
+
+// AI Trends 라우트 로딩
+try {
+  console.log('🔄 Loading AI trends routes...');
+  const aiTrendsRoutes = require('./routes/ai-trends');
+  app.use('/api/ai-trends', aiTrendsRoutes);
+  console.log('✅ AI Trends routes loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load AI trends routes:', error.message);
+}
+
+// Translate 라우트 로딩
+try {
+  console.log('🔄 Loading translate routes...');
+  const translateRoutes = require('./routes/translate');
+  app.use('/api/translate', translateRoutes);
+  console.log('✅ Translate routes loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load translate routes:', error.message);
+}
 
 // Health check (배포 플랫폼용)
 app.get('/health', (req, res) => {

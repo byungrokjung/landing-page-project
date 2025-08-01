@@ -4,6 +4,7 @@ import App from './App.jsx'
 import TopVideos from './TopVideos.jsx'
 import CreativeStudio from './CreativeStudio.jsx'
 import AIVideoGenerator from './AIVideoGenerator.jsx'
+import AITrendsCollection from './AITrendsCollection.jsx'
 import Dashboard from './Dashboard.jsx'
 import SubscriptionPlans from './SubscriptionPlans.jsx'
 import PaymentSuccess from './PaymentSuccess.jsx'
@@ -20,6 +21,8 @@ function Router() {
       return <CreativeStudio />;
     case '/ai-video-generator':
       return <AIVideoGenerator />;
+    case '/ai-trends':
+      return <AITrendsCollection />;
     case '/dashboard':
       return <Dashboard />;
     case '/subscription':
