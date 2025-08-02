@@ -71,6 +71,16 @@ try {
   console.error('❌ Failed to load translate routes:', error.message);
 }
 
+// AI Trends Analysis 라우트 로딩
+try {
+  console.log('🔄 Loading AI trends analysis routes...');
+  const aiTrendsAnalysisRoutes = require('./routes/ai-trends-analysis');
+  app.use('/api/ai-trends-analysis', aiTrendsAnalysisRoutes);
+  console.log('✅ AI Trends Analysis routes loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load AI trends analysis routes:', error.message);
+}
+
 // Health check (배포 플랫폼용)
 app.get('/health', (req, res) => {
   res.status(200).json({ 

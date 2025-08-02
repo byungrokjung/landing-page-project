@@ -465,7 +465,73 @@ const AITrendsCollection = () => {
       padding: '20px'
     }}>
       <div style={{ marginBottom: '40px', textAlign: 'center' }}>
-        <h1 style={{ color: '#fff', fontSize: '28px', marginBottom: '10px' }}>AI 트렌드 컬렉션</h1>
+        <h1 style={{ color: '#fff', fontSize: '28px', marginBottom: '15px' }}>AI 트렌드 컬렉션</h1>
+        
+        {/* 분석 도구 네비게이션 */}
+        <div style={{
+          display: 'flex',
+          gap: '15px',
+          justifyContent: 'center',
+          marginBottom: '15px',
+          flexWrap: 'wrap'
+        }}>
+          <a 
+            href="/ai-trends-dashboard" 
+            style={{
+              display: 'inline-block',
+              padding: '10px 20px',
+              borderRadius: '25px',
+              border: '2px solid #0088ff',
+              background: 'transparent',
+              color: '#0088ff',
+              textDecoration: 'none',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = '#0088ff';
+              e.target.style.color = '#fff';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'transparent';
+              e.target.style.color = '#0088ff';
+              e.target.style.transform = 'translateY(0)';
+            }}
+          >
+            🚀 분석 대시보드
+          </a>
+          
+          <a 
+            href="/ai-insight-report" 
+            style={{
+              display: 'inline-block',
+              padding: '10px 20px',
+              borderRadius: '25px',
+              border: '2px solid #9333ea',
+              background: 'transparent',
+              color: '#9333ea',
+              textDecoration: 'none',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = '#9333ea';
+              e.target.style.color = '#fff';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'transparent';
+              e.target.style.color = '#9333ea';
+              e.target.style.transform = 'translateY(0)';
+            }}
+          >
+            📝 인사이트 리포트
+          </a>
+        </div>
+        
         <a href="/" style={{ color: '#00ff88', textDecoration: 'none', fontSize: '14px' }}>← 홈으로 돌아가기</a>
       </div>
 

@@ -5,6 +5,8 @@ import TopVideos from './TopVideos.jsx'
 import CreativeStudio from './CreativeStudio.jsx'
 import AIVideoGenerator from './AIVideoGenerator.jsx'
 import AITrendsCollection from './AITrendsCollection.jsx'
+import AITrendsDashboard from './AITrendsDashboard.jsx'
+import AIInsightReport from './AIInsightReport.jsx'
 import Dashboard from './Dashboard.jsx'
 import SubscriptionPlans from './SubscriptionPlans.jsx'
 import PaymentSuccess from './PaymentSuccess.jsx'
@@ -23,6 +25,10 @@ function Router() {
       return <AIVideoGenerator />;
     case '/ai-trends':
       return <AITrendsCollection />;
+    case '/ai-trends-dashboard':
+      return <AITrendsDashboard />;
+    case '/ai-insight-report':
+      return <AIInsightReport />;
     case '/dashboard':
       return <Dashboard />;
     case '/subscription':
