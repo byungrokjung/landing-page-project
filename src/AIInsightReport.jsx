@@ -10,6 +10,7 @@ const AIInsightReport = () => {
     includeTranslation: true
   });
   const [generatingReport, setGeneratingReport] = useState(false);
+  const [selectedModel, setSelectedModel] = useState('gpt-3.5-turbo'); // 모델 선택 상태
 
   // 실제 백엔드 API로 리포트 생성
   const generateReport = async () => {
@@ -29,7 +30,8 @@ const AIInsightReport = () => {
         body: JSON.stringify({
           timeRange: reportType === 'weekly' ? '7days' : '30days',
           interests: userPreferences.interests,
-          reportType: userPreferences.reportFormat
+          reportType: userPreferences.reportFormat,
+          aiModel: selectedModel // 선택된 모델 전송
         })
       });
 
@@ -529,6 +531,50 @@ ${reportData.recommendations.map(rec => `
                 ))}
               </div>
             </div>
+
+            {/* AI 모델 선택 */}
+            <div>
+              <label style={{ color: '#ccc', fontSize: '14px', marginBottom: '10px', display: 'block' }}>
+                AI 분석 모델
+              </label>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                {['gpt-3.5-turbo', 'gpt-4o'].map((model) => (
+                  <button
+                    key={model}
+                    onClick={() => setSelectedModel(model)}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: '20px',
+                      border: selectedModel === model ? '2px solid #0088ff' : '1px solid #333',
+                      background: selectedModel === model ? '#0088ff' : 'transparent',
+                      color: selectedModel === model ? '#fff' : '#ccc',
+                      cursor: 'pointer',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    {model === 'gpt-3.5-turbo' ? 'GPT-3.5-Turbo' : 'GPT-4o'}
+                    {model === 'gpt-4o' && (
+                      <span style={{
+                        background: '#ff6b35',
+                        color: '#fff',
+                        padding: '1px 4px',
+                        borderRadius: '6px',
+                        fontSize: '8px',
+                        fontWeight: 'bold',
+                        marginLeft: '4px'
+                      }}>
+                        PREMIUM
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <p style={{ color: '#888', fontSize: '11px', marginTop: '5px' }}>
+                GPT-4o는 더 정확하고 상세한 분석을 제공합니다
+              </p>
+            </div>
           </div>
 
           <div style={{ marginTop: '20px', textAlign: 'center' }}>
@@ -627,16 +673,29 @@ ${reportData.recommendations.map(rec => `
                 <h3 style={{ color: '#00ff88', marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
                   🤖 OpenAI 생성 분석 인사이트
                   <span style={{
-                    background: '#00ff88',
-                    color: '#000',
+                    background: selectedModel === 'gpt-4o' ? '#0088ff' : '#00ff88',
+                    color: selectedModel === 'gpt-4o' ? '#fff' : '#000',
                     padding: '2px 8px',
                     borderRadius: '10px',
                     fontSize: '10px',
                     fontWeight: 'bold',
                     marginLeft: '10px'
                   }}>
-                    GPT-3.5-turbo
+                    {selectedModel === 'gpt-3.5-turbo' ? 'GPT-3.5-Turbo' : 'GPT-4o'}
                   </span>
+                  {selectedModel === 'gpt-4o' && (
+                    <span style={{
+                      background: '#ff6b35',
+                      color: '#fff',
+                      padding: '1px 4px',
+                      borderRadius: '6px',
+                      fontSize: '8px',
+                      fontWeight: 'bold',
+                      marginLeft: '5px'
+                    }}>
+                      PREMIUM
+                    </span>
+                  )}
                 </h3>
                 <div style={{
                   background: '#0a0a0a',

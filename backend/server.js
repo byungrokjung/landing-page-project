@@ -81,6 +81,26 @@ try {
   console.error('❌ Failed to load AI trends analysis routes:', error.message);
 }
 
+// Telegram 알림 라우트 로딩
+try {
+  console.log('🔄 Loading Telegram notification routes...');
+  const telegramRoutes = require('./routes/telegram');
+  app.use('/api/telegram', telegramRoutes);
+  console.log('✅ Telegram routes loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load Telegram routes:', error.message);
+}
+
+// 알림 모니터링 라우트 로딩
+try {
+  console.log('🔄 Loading notification monitor routes...');
+  const monitorRoutes = require('./routes/notification-monitor');
+  app.use('/api/monitor', monitorRoutes);
+  console.log('✅ Notification monitor routes loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load notification monitor routes:', error.message);
+}
+
 // Health check (배포 플랫폼용)
 app.get('/health', (req, res) => {
   res.status(200).json({ 

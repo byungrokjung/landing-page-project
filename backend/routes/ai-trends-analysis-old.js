@@ -10,45 +10,27 @@ const supabase = createClient(
 );
 
 // OpenAI API 호출 함수
-const callOpenAI = async (prompt, modelName = 'gpt-3.5-turbo') => {
+const callOpenAI = async (prompt) => {
   const openaiApiKey = process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY;
   
   if (!openaiApiKey) {
     throw new Error('OpenAI API key not configured');
   }
 
-  // 모델별 설정
-  const modelConfig = {
-    'gpt-3.5-turbo': {
-      model: 'gpt-3.5-turbo',
-      max_tokens: 1500,
-      temperature: 0.7
-    },
-    'gpt-4o': {
-      model: 'gpt-4o',
-      max_tokens: 2000,
-      temperature: 0.6
-    }
-  };
-
-  const config = modelConfig[modelName] || modelConfig['gpt-3.5-turbo'];
-
   const postData = JSON.stringify({
-    model: config.model,
+    model: 'gpt-3.5-turbo',
     messages: [
       {
         role: 'system',
-        content: modelName === 'gpt-4o' 
-          ? 'You are an advanced AI trends analyst with deep expertise in business strategy and technology assessment. Provide comprehensive, data-driven insights in Korean with detailed analysis, strategic recommendations, and actionable business intelligence. Focus on market implications, competitive advantages, and future opportunities.'
-          : 'You are an AI trends analyst. Provide professional, data-driven insights in Korean. Be specific, actionable, and business-focused.'
+        content: 'You are an AI trends analyst. Provide professional, data-driven insights in Korean. Be specific, actionable, and business-focused.'
       },
       {
         role: 'user',
         content: prompt
       }
     ],
-    max_tokens: config.max_tokens,
-    temperature: config.temperature
+    max_tokens: 1500,
+    temperature: 0.7
   });
 
   return new Promise((resolve, reject) => {
@@ -94,6 +76,16 @@ router.get('/analytics', async (req, res) => {
     
     console.log(`📊 Starting analytics for timeRange: ${timeRange}`);
 
+    // 날짜 필터 설정
+    let dateFilter = '';
+    if (timeRange === '7days') {
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      dateFilter = `AND created_at >= '${sevenDaysAgo}'`;
+    } else if (timeRange === '30days') {
+      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      dateFilter = `AND created_at >= '${thirtyDaysAgo}'`;
+    }
+
     // Supabase에서 트렌드 데이터 가져오기
     const { data: trends, error } = await supabase
       .from('ai_trend_news')
@@ -125,67 +117,29 @@ router.get('/analytics', async (req, res) => {
     const sourceStats = {};
 
     filteredTrends.forEach(trend => {
-      // AI 관련 카테고리 자동 분류 + 트렌드 점수 계산
+      // AI 관련 카테고리 자동 분류
       const title = (trend.title || '').toLowerCase();
       const content = (trend.content || '').toLowerCase();
       const tags = trend.tags || [];
       
       let category = 'General';
-      let trendScore = 0.5; // 기본 점수
-      
-      // 1. AI 카테고리 분류 + 점수 계산
       if (title.includes('ai') || title.includes('artificial intelligence') || content.includes('ai ')) {
-        trendScore += 0.3; // AI 관련 보너스
-        
-        if (title.includes('gpt') || title.includes('language model') || content.includes('language model') || title.includes('chatgpt')) {
+        if (title.includes('gpt') || title.includes('language model') || content.includes('language model')) {
           category = 'Language Models';
-          trendScore += 0.2; // 핫한 분야 보너스
         } else if (title.includes('vision') || title.includes('image') || content.includes('computer vision')) {
           category = 'Computer Vision';
-          trendScore += 0.15;
         } else if (title.includes('machine learning') || title.includes('ml ') || content.includes('machine learning')) {
           category = 'Machine Learning';
-          trendScore += 0.2;
         } else if (title.includes('robot') || content.includes('robot')) {
           category = 'Robotics';
-          trendScore += 0.15;
         } else {
           category = 'AI Technology';
-          trendScore += 0.1;
         }
       } else if (title.includes('tech') || title.includes('startup') || title.includes('app')) {
         category = 'Technology';
-        trendScore += 0.1;
       }
       
-      // 2. 키워드 기반 트렌드 점수 조정
-      const trendKeywords = {
-        'breakthrough': 0.3, 'revolutionary': 0.25, 'game-changing': 0.2,
-        'launches': 0.15, 'announces': 0.1, 'releases': 0.1,
-        'raises': 0.2, 'funding': 0.15, 'investment': 0.1,
-        'billion': 0.25, 'million': 0.15,
-        'new': 0.05, 'first': 0.1, 'latest': 0.05
-      };
-      
-      Object.entries(trendKeywords).forEach(([keyword, bonus]) => {
-        if (title.includes(keyword) || content.includes(keyword)) {
-          trendScore += bonus;
-        }
-      });
-      
-      // 3. 날짜 기반 점수 (최신일수록 높은 점수)
-      const daysSinceCreated = (Date.now() - new Date(trend.created_at)) / (1000 * 60 * 60 * 24);
-      if (daysSinceCreated <= 1) trendScore += 0.2; // 1일 이내
-      else if (daysSinceCreated <= 3) trendScore += 0.1; // 3일 이내
-      else if (daysSinceCreated <= 7) trendScore += 0.05; // 1주일 이내
-      
-      // 4. 컨텐츠 길이 기반 점수 (더 자세한 내용일수록)
-      const contentLength = (trend.content || '').length;
-      if (contentLength > 500) trendScore += 0.1;
-      else if (contentLength > 200) trendScore += 0.05;
-      
-      // 최종 점수 정규화 (0.0 ~ 1.0)
-      const confidence = Math.min(Math.max(trendScore, 0.1), 1.0);
+      const confidence = trend.importance_score || 0.8; // importance_score 사용
       const source = trend.source || 'Unknown';
       const date = new Date(trend.created_at).toLocaleDateString('ko-KR');
 
@@ -212,43 +166,17 @@ router.get('/analytics', async (req, res) => {
         confidences.reduce((sum, conf) => sum + conf, 0) / confidences.length;
     });
 
-    // 3. 전체 통계 (계산된 트렌드 점수 사용)
+    // 3. 전체 통계
     const totalTrends = filteredTrends.length;
-    const avgConfidence = Object.values(confidenceByCategory)
-      .flat()
-      .reduce((sum, conf) => sum + conf, 0) / 
-      Object.values(confidenceByCategory).flat().length;
+    const avgConfidence = filteredTrends.reduce((sum, trend) => 
+      sum + (trend.importance_score || 0.8), 0) / totalTrends;
     
-    const topCategory = Object.keys(categoryStats).length > 0 ? 
-      Object.keys(categoryStats).reduce((a, b) => 
-        categoryStats[a].count > categoryStats[b].count ? a : b) : 'General';
+    const topCategory = Object.keys(categoryStats).reduce((a, b) => 
+      categoryStats[a].count > categoryStats[b].count ? a : b, 'Unknown');
 
-    // 4. 상위 트렌드 (계산된 트렌드 점수 기준)
+    // 4. 상위 트렌드 (importance_score 기준)
     const topTrends = filteredTrends
-      .map(trend => {
-        // 트렌드 점수 재계산 (위와 동일한 로직)
-        const title = (trend.title || '').toLowerCase();
-        const content = (trend.content || '').toLowerCase();
-        let trendScore = 0.5;
-        
-        if (title.includes('ai') || content.includes('ai ')) trendScore += 0.3;
-        if (title.includes('gpt') || title.includes('chatgpt')) trendScore += 0.2;
-        if (title.includes('machine learning')) trendScore += 0.2;
-        
-        const trendKeywords = ['breakthrough', 'revolutionary', 'launches', 'raises', 'billion', 'million', 'new', 'first'];
-        trendKeywords.forEach(keyword => {
-          if (title.includes(keyword) || content.includes(keyword)) {
-            trendScore += keyword === 'breakthrough' ? 0.3 : keyword === 'billion' ? 0.25 : 0.1;
-          }
-        });
-        
-        const daysSinceCreated = (Date.now() - new Date(trend.created_at)) / (1000 * 60 * 60 * 24);
-        if (daysSinceCreated <= 1) trendScore += 0.2;
-        else if (daysSinceCreated <= 3) trendScore += 0.1;
-        
-        return { ...trend, calculatedScore: Math.min(Math.max(trendScore, 0.1), 1.0) };
-      })
-      .sort((a, b) => b.calculatedScore - a.calculatedScore)
+      .sort((a, b) => (b.importance_score || 0.8) - (a.importance_score || 0.8))
       .slice(0, 10);
 
     // 5. 최신 트렌드 (최근 3일)
@@ -322,7 +250,7 @@ router.get('/analytics', async (req, res) => {
           id: trend.id,
           title: trend.title,
           category: category,
-          confidence: Math.round(trend.calculatedScore * 100),
+          confidence: Math.round((trend.importance_score || 0.8) * 100),
           source: trend.source,
           date: trend.created_at
         };
@@ -352,7 +280,7 @@ router.get('/analytics', async (req, res) => {
           id: trend.id,
           title: trend.title,
           category: category,
-          confidence: Math.round(trend.calculatedScore * 100),
+          confidence: Math.round((trend.importance_score || 0.8) * 100),
           source: trend.source,
           date: trend.created_at
         };
@@ -381,11 +309,10 @@ router.post('/generate-insights', async (req, res) => {
     const { 
       timeRange = '7days', 
       interests = ['Language Models', 'Machine Learning'],
-      reportType = 'detailed',
-      aiModel = 'gpt-3.5-turbo'
+      reportType = 'detailed'
     } = req.body;
 
-    console.log(`🧠 Generating AI insights using ${aiModel} for interests: ${interests.join(', ')}`);
+    console.log(`🧠 Generating AI insights for interests: ${interests.join(', ')}`);
 
     // 1. 관련 트렌드 데이터 가져오기
     const { data: allTrends, error } = await supabase
@@ -396,7 +323,7 @@ router.post('/generate-insights', async (req, res) => {
 
     if (error) throw error;
 
-    // 2. 시간 범위 필터링
+    // 2. 시간 범위 및 관심사 필터링
     let filteredTrends = allTrends;
     
     // 시간 필터
@@ -410,51 +337,39 @@ router.post('/generate-insights', async (req, res) => {
         new Date(trend.created_at) >= thirtyDaysAgo);
     }
 
-    // 3. AI 관련 트렌드 필터링
+    // 관심사 필터 (실제 데이터에서 AI 관련 카테고리 자동 분류)
     const relevantTrends = filteredTrends.filter(trend => {
       const title = (trend.title || '').toLowerCase();
       const content = (trend.content || '').toLowerCase();
       
       // AI 관련 키워드로 필터링
-      return title.includes('ai') || title.includes('artificial intelligence') || 
-             title.includes('machine learning') || title.includes('gpt') ||
-             content.includes('ai ') || content.includes('artificial intelligence') ||
-             title.includes('chatgpt') || title.includes('robot');
+      return interests.some(interest => {
+        if (interest === 'Language Models') {
+          return title.includes('gpt') || title.includes('language model') || 
+                 content.includes('language model') || title.includes('chatgpt');
+        } else if (interest === 'Machine Learning') {
+          return title.includes('machine learning') || title.includes('ml ') || 
+                 title.includes('ai') || content.includes('machine learning');
+        } else if (interest === 'Computer Vision') {
+          return title.includes('vision') || title.includes('image') || 
+                 content.includes('computer vision');
+        } else if (interest === 'Robotics') {
+          return title.includes('robot') || content.includes('robot');
+        }
+        return false;
+      }) || title.includes('ai') || content.includes('artificial intelligence');
     });
 
-    console.log(`📊 Found ${relevantTrends.length} relevant AI trends`);
+    console.log(`📊 Found ${relevantTrends.length} relevant trends`);
 
-    // 4. OpenAI를 사용한 인사이트 생성
-    // 4. 트렌드 점수 계산 및 정렬
-    const scoredTrends = relevantTrends.map(trend => {
-      const title = (trend.title || '').toLowerCase();
-      const content = (trend.content || '').toLowerCase();
-      let trendScore = 0.5;
-      
-      if (title.includes('ai') || content.includes('ai ')) trendScore += 0.3;
-      if (title.includes('gpt') || title.includes('chatgpt')) trendScore += 0.2;
-      if (title.includes('machine learning')) trendScore += 0.2;
-      
-      const trendKeywords = ['breakthrough', 'revolutionary', 'launches', 'raises', 'billion', 'million'];
-      trendKeywords.forEach(keyword => {
-        if (title.includes(keyword) || content.includes(keyword)) {
-          trendScore += keyword === 'breakthrough' ? 0.3 : keyword === 'billion' ? 0.25 : 0.15;
-        }
-      });
-      
-      const daysSinceCreated = (Date.now() - new Date(trend.created_at)) / (1000 * 60 * 60 * 24);
-      if (daysSinceCreated <= 1) trendScore += 0.2;
-      
-      return { ...trend, calculatedScore: Math.min(Math.max(trendScore, 0.1), 1.0) };
-    }).sort((a, b) => b.calculatedScore - a.calculatedScore);
-
-    const trendsData = scoredTrends.slice(0, 15).map(trend => ({
+    // 3. OpenAI를 사용한 인사이트 생성
+    const trendsData = relevantTrends.slice(0, 20).map(trend => ({
       title: trend.title,
-      confidence: trend.calculatedScore,
+      category: trend.category,
+      confidence: trend.importance_score || 0.8,
       source: trend.source,
       date: new Date(trend.created_at).toLocaleDateString('ko-KR'),
-      content: (trend.content || '').substring(0, 200),
-      trendScore: Math.round(trend.calculatedScore * 100)
+      content: (trend.content || '').substring(0, 200) // 요약을 위해 내용 일부 포함
     }));
 
     const prompt = `
@@ -462,13 +377,13 @@ router.post('/generate-insights', async (req, res) => {
 
 기간: ${timeRange === '7days' ? '최근 7일' : timeRange === '30days' ? '최근 30일' : '전체 기간'}
 관심 분야: ${interests.join(', ')}
-AI 관련 트렌드 수: ${relevantTrends.length}개
+트렌드 수: ${relevantTrends.length}개
 
-주요 트렌드 데이터 (트렌드 점수순):
+주요 트렌드 데이터:
 ${trendsData.map((trend, index) => 
-  `${index + 1}. ${trend.title}
-     트렌드 점수: ${trend.trendScore}점, 출처: ${trend.source}
-     내용 요약: ${trend.content}`
+  `${index + 1}. [${trend.category}] ${trend.title}
+     중요도: ${Math.round(trend.confidence * 100)}%, 출처: ${trend.source}
+     내용: ${trend.content}`
 ).join('\n\n')}
 
 다음 항목에 대해 분석해주세요:
@@ -481,24 +396,12 @@ ${trendsData.map((trend, index) =>
 한국어로 전문적이고 실용적인 분석을 제공해주세요.
 `;
 
-    const aiInsights = await callOpenAI(prompt, aiModel);
+    const aiInsights = await callOpenAI(prompt);
 
-    // 5. 통계 데이터 계산
+    // 4. 통계 데이터 계산
     const categoryStats = {};
     relevantTrends.forEach(trend => {
-      const title = (trend.title || '').toLowerCase();
-      let category = 'AI Technology';
-      
-      if (title.includes('gpt') || title.includes('language model')) {
-        category = 'Language Models';
-      } else if (title.includes('vision') || title.includes('image')) {
-        category = 'Computer Vision';
-      } else if (title.includes('machine learning') || title.includes('ml ')) {
-        category = 'Machine Learning';
-      } else if (title.includes('robot')) {
-        category = 'Robotics';
-      }
-      
+      const category = trend.category;
       if (!categoryStats[category]) {
         categoryStats[category] = { count: 0, avgConfidence: 0, trends: [] };
       }
@@ -513,12 +416,12 @@ ${trendsData.map((trend, index) =>
         trends.reduce((sum, trend) => sum + (trend.importance_score || 0.8), 0) / trends.length;
     });
 
-    // 6. 상위 트렌드 선정
+    // 5. 상위 트렌드 선정
     const topTrends = relevantTrends
       .sort((a, b) => (b.importance_score || 0.8) - (a.importance_score || 0.8))
       .slice(0, 5);
 
-    // 7. 결과 구성
+    // 6. 결과 구성
     const insightReport = {
       period: timeRange === '7days' ? '주간' : timeRange === '30days' ? '월간' : '전체',
       generatedAt: new Date().toLocaleString('ko-KR'),
@@ -543,34 +446,19 @@ ${trendsData.map((trend, index) =>
         percentage: Math.round((categoryStats[category].count / relevantTrends.length) * 100)
       })),
 
-      topTrends: topTrends.map(trend => {
-        const title = (trend.title || '').toLowerCase();
-        let category = 'AI Technology';
-        
-        if (title.includes('gpt') || title.includes('language model')) {
-          category = 'Language Models';
-        } else if (title.includes('vision') || title.includes('image')) {
-          category = 'Computer Vision';
-        } else if (title.includes('machine learning') || title.includes('ml ')) {
-          category = 'Machine Learning';
-        } else if (title.includes('robot')) {
-          category = 'Robotics';
-        }
-        
-        return {
-          id: trend.id,
-          title: trend.title,
-          category: category,
-          confidence: Math.round(trend.calculatedScore * 100),
-          source: trend.source,
-          date: trend.created_at
-        };
-      }),
+      topTrends: topTrends.map(trend => ({
+        id: trend.id,
+        title: trend.title,
+        category: trend.category,
+        confidence: Math.round((trend.importance_score || 0.8) * 100),
+        source: trend.source,
+        date: trend.created_at
+      })),
 
       metadata: {
         analysisDate: new Date().toISOString(),
         dataSource: 'supabase',
-        aiModel: aiModel
+        aiModel: 'gpt-3.5-turbo'
       }
     };
 

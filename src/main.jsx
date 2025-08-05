@@ -11,6 +11,7 @@ import Dashboard from './Dashboard.jsx'
 import SubscriptionPlans from './SubscriptionPlans.jsx'
 import PaymentSuccess from './PaymentSuccess.jsx'
 import PaymentCancel from './PaymentCancel.jsx'
+import TelegramNotifications from './TelegramNotifications.jsx'
 import './index.css'
 
 function Router() {
@@ -37,6 +38,8 @@ function Router() {
       return <PaymentSuccess />;
     case '/payment/cancel':
       return <PaymentCancel />;
+    case '/telegram-notifications':
+      return <TelegramNotifications />;
     default:
       return <App />;
   }

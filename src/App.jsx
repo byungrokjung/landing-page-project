@@ -678,6 +678,34 @@ function App() {
                     >
                       📊 AI Trends
                     </a>
+                    <a href="/telegram-notifications" style={{
+                      color: '#6b7280',
+                      textDecoration: 'none',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      padding: '12px 24px',
+                      borderRadius: '24px',
+                      background: 'rgba(255, 255, 255, 0.6)',
+                      border: '1px solid rgba(255, 255, 255, 0.8)',
+                      transition: 'all 0.3s ease',
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.9)';
+                      e.target.style.color = '#374151';
+                      e.target.style.transform = 'translateY(-2px)';
+                      e.target.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.12)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = 'rgba(255, 255, 255, 0.6)';
+                      e.target.style.color = '#6b7280';
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+                    }}
+                    >
+                      📱 텔레그램 알림
+                    </a>
                   </div>
 
                   {/* 사용자 수 표시 */}
